@@ -1,25 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/reducers/'
-import { setColor } from 'src/reducers/CarReducer'
+import { setNumber } from 'src/reducers/CarReducer'
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const color = useSelector((state: RootState) => state.car.color)
+  const number = useSelector((state: RootState) => state.car.num)
+  const state = useSelector((state: RootState) => state)
 
-  console.log(color)
+  console.log(state)
 
   return (
     <div className="App">
       <header className="App-header">
-        <p style={{ color: color }}>{color}</p>
+        <p>{number}</p>
         <div>
           <button
             onClick={() => {
-              console.log(color)
-              dispatch(setColor)
+              dispatch(setNumber(number + 1))
             }}
           >
-            to red
+            to redaaa
           </button>
         </div>
         <a

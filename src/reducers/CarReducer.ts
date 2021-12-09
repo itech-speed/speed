@@ -1,22 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 interface IState {
-  color: string
+  num: number
 }
 
 const initialState: IState = {
-  color: 'green',
+  num: 1,
 }
 
 const CarReducer = createSlice({
   name: 'car',
   initialState,
   reducers: {
-    setColor(state) {
-      state.color = 'red'
+    setNumber(state, { payload }) {
+      state.num = payload
     },
   },
 })
 
 export default CarReducer.reducer
-export const { setColor } = CarReducer.actions
+export const { setNumber } = CarReducer.actions
