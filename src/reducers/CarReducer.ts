@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-// REDUCER
 interface IState {
   color: string
 }
@@ -13,11 +12,11 @@ const CarReducer = createSlice({
   name: 'car',
   initialState,
   reducers: {
-    colorToRed(state) {
-      state.color = 'res'
+    setColor(state) {
+      state.color = 'red'
     },
   },
 })
 
 export default CarReducer.reducer
-export const { colorToRed } = CarReducer.actions
+export const { setColor } = CarReducer.actions
