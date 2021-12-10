@@ -1,5 +1,5 @@
 import { useRaycastVehicle } from '@react-three/cannon'
-import { PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useMoveControls } from 'src/hooks/useCarControl'
@@ -75,6 +75,8 @@ function Beetle({
   }))
 
   useFrame(() => {
+    console.log(vehicle.current)
+
     const { forward, backward, left, right, brake, reset } = controls.current
     for (let e = 2; e < 4; e++)
       api.applyEngineForce(
@@ -130,7 +132,7 @@ function Beetle({
       />
       {/* 
       @ts-ignore */}
-      {/* <OrbitControls screenSpacePanning={false} /> */}
+      <OrbitControls screenSpacePanning={false} />
     </>
   )
 }
