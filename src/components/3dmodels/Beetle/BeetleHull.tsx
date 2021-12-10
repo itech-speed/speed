@@ -1,5 +1,6 @@
 import { useBox } from '@react-three/cannon'
 import { useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import { forwardRef } from 'react'
 
 useGLTF.preload('/3dmodels/Beetle.glb')

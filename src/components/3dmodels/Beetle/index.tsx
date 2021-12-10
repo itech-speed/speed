@@ -1,5 +1,5 @@
 import { useRaycastVehicle } from '@react-three/cannon'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useMoveControls } from 'src/hooks/useCarControl'
@@ -24,6 +24,8 @@ function Beetle({
   const wheel3 = useRef()
   const wheel4 = useRef()
   const controls = useMoveControls()
+
+  const camera = useRef()
 
   const wheelInfo = {
     radius,
@@ -87,7 +89,11 @@ function Beetle({
     for (let b = 2; b < 4; b++) api.setBrake(brake ? maxBrake : 0, b)
     if (reset) {
       // @ts-ignore
-      chassis.current.api.position.set(0, 0.5, 0)
+      chassis.current.api.position.set(
+        props.position[0],
+        props.position[1],
+        props.position[2],
+      )
       // @ts-ignore
       chassis.current.api.velocity.set(0, 0, 0)
       // @ts-ignore
@@ -115,16 +121,16 @@ function Beetle({
       {/* 
       @ts-ignore */}
       <PerspectiveCamera
-        // ref={vehicle}
-        position={[0, 3, -6]}
-        rotation={[0, 3.14, 0]}
+        ref={camera}
+        position={[-7.36, 9.32, -6.94]}
+        rotation={[-2.21, -0.518, -2.518]}
         near={0.01}
         far={1000}
         makeDefault
       />
       {/* 
       @ts-ignore */}
-      <OrbitControls screenSpacePanning={false} />
+      {/* <OrbitControls screenSpacePanning={false} /> */}
     </>
   )
 }
