@@ -1,36 +1,78 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from 'src/reducers/'
-import { setNumber } from 'src/reducers/CarReducer'
+import { Physics, useCylinder, usePlane } from '@react-three/cannon'
+import { OrbitControls } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import Beetle from 'src/components/3dmodels/Beetle'
+
+const Plane = (props: any) => {
+  const [ref] = usePlane(() => ({
+    type: 'Static',
+    material: 'ground',
+    ...props,
+  }))
+  return (
+    <group ref={ref}>
+      <mesh receiveShadow>
+        <planeGeometry args={[100, 100]} />
+        <meshStandardMaterial color="#47614f" />
+      </mesh>
+    </group>
+  )
+}
+
+const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }) => {
+  // @ts-ignore
+  const [ref] = useCylinder(() => ({ mass: 10, args, ...props }))
+  return (
+    <>
+      <mesh ref={ref} castShadow>
+        <cylinderGeometry args={args} />
+        <meshStandardMaterial color="#333" />
+      </mesh>
+    </>
+  )
+}
 
 const App = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const number = useSelector((state: RootState) => state.car.num)
-  const state = useSelector((state: RootState) => state)
-
-  console.log(state)
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>{number}</p>
-        <div>
-          <button
-            onClick={() => {
-              dispatch(setNumber(number + 1))
-            }}
-          >
-            to redaaa
-          </button>
-        </div>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="app">
+      <header className="App-header"></header>
+      <Canvas dpr={[1, 1.5]} shadows camera={{ position: [0, 5, 15], fov: 50 }}>
+        <color attach="background" args={['#e8fffe']} />
+        <ambientLight intensity={0.3} />
+        <spotLight
+          color="#fffbd1"
+          position={[70, 20, 30]}
+          angle={0.5}
+          intensity={2}
+          castShadow
+          penumbra={1}
+        />
+        <pointLight position={[10, 10, 10]} />
+
+        <Physics
+          broadphase="SAP"
+          // @ts-ignore
+          contactEquationRelaxation={4}
+          friction={1e-3}
+          allowSleep
         >
-          Learn React
-        </a>
-      </header>
+          {/* contact groud */}
+          <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: 'floor' }} />
+
+          <Beetle />
+
+          <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
+        </Physics>
+      </Canvas>
+
+      <div style={{ position: 'absolute', top: 30, left: 40 }}>
+        <pre>
+          Must run on descktop and fullscreen!
+          <br />
+          WASD to drive, space to brake
+          <br />R to reset
+        </pre>
+      </div>
     </div>
   )
 }
