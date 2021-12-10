@@ -1,5 +1,4 @@
 import { Physics, useCylinder, usePlane } from '@react-three/cannon'
-import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Beetle from 'src/components/3dmodels/Beetle'
 
@@ -57,9 +56,13 @@ const App = () => {
           allowSleep
         >
           {/* contact groud */}
-          <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: 'floor' }} />
+          <Plane
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, 0, 0]}
+            userData={{ id: 'floor' }}
+          />
 
-          <Beetle />
+          <Beetle position={[0, 1, 0]} />
 
           <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
         </Physics>

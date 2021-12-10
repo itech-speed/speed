@@ -25,8 +25,6 @@ function Beetle({
   const wheel4 = useRef()
   const controls = useMoveControls()
 
-  const camera = useRef()
-
   const wheelInfo = {
     radius,
     directionLocal: [0, -1, 0],
@@ -101,7 +99,7 @@ function Beetle({
 
   return (
     <>
-      <group ref={vehicle} position={[0, 0, 0]}>
+      <group ref={vehicle} position={[0, -0.43, 0]}>
         <BeetleHull
           ref={chassis}
           rotation={props.rotation}
