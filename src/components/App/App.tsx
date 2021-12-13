@@ -64,19 +64,6 @@ const App = () => {
 
           <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
         </Physics>
-
-        {/* 
-      @ts-ignore */}
-        <PerspectiveCamera
-          position={[0, 3, -6]}
-          rotation={[0, 3.14, 0]}
-          near={0.01}
-          far={1000}
-          makeDefault
-        />
-        {/* 
-      @ts-ignore */}
-        <OrbitControls screenSpacePanning={false} />
       </Canvas>
 
       <div style={{ position: 'absolute', top: 30, left: 40 }}>
