@@ -76,8 +76,6 @@ function Beetle({
   }))
 
   useFrame(() => {
-    console.log(camera.current)
-
     const { forward, backward, left, right, brake, reset } = controls.current
     for (let e = 2; e < 4; e++) {
       api.applyEngineForce(
@@ -129,15 +127,14 @@ function Beetle({
       @ts-ignore */}
       <PerspectiveCamera
         ref={camera}
-        position={[4.16, 19, -3.75]}
-        rotation={[-1.245, 0.405, 0.863]}
+        position={[-24, 18, -26]}
         near={0.01}
         far={500}
         makeDefault
       />
       {/* 
       @ts-ignore */}
-      <OrbitControls screenSpacePanning={false} />
+      <OrbitControls screenSpacePanning={false} target={[-10, 1, -10]} />
     </>
   )
 }

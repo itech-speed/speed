@@ -20,18 +20,22 @@ const Plane = (props: PlaneProps) => {
     <group ref={ref}>
       <mesh receiveShadow>
         <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color="#47614f" />
+        <meshStandardMaterial color="#3b663d" />
       </mesh>
     </group>
   )
 }
 
 const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }: CylinderProps) => {
-  const [ref] = useCylinder(() => ({ mass: 10, args, ...props }))
+  const [ref] = useCylinder(() => ({
+    mass: 10,
+    args,
+    ...props,
+  }))
   return (
     <mesh ref={ref} castShadow>
       <cylinderGeometry args={args} />
-      <meshStandardMaterial color="#333" />
+      <meshStandardMaterial color="#4d413f" />
     </mesh>
   )
 }
@@ -42,7 +46,7 @@ const Stone = ({ args = [40, 4, 2], ...props }: any) => {
     <>
       <mesh ref={ref} castShadow>
         <boxGeometry args={args} />
-        <meshStandardMaterial color="#47614f" />
+        <meshStandardMaterial color="#818a83" />
       </mesh>
     </>
   )
@@ -61,16 +65,15 @@ const App = () => {
       <header className="App-header"></header>
       <Canvas dpr={[1, 1.5]} shadows camera={{ position: [0, 5, 15], fov: 50 }}>
         <color attach="background" args={['#e8fffe']} />
-        <ambientLight intensity={0.3} />
+        <ambientLight intensity={0.6} />
         <spotLight
           color="#fffbd1"
-          position={[70, 20, 30]}
-          angle={0.5}
+          position={[100, 80, 20]}
+          angle={0.3}
           intensity={2}
           castShadow
           penumbra={1}
         />
-        <pointLight position={[10, 10, 10]} />
 
         <Physics
           broadphase="SAP"
@@ -103,8 +106,8 @@ const App = () => {
             />
           </group>
 
-          <Pillar position={[5, 2.5, -5]} userData={{ id: USERDATA_PILLAR }} />
-          <Arrow position={[5, 1, 5]} userData={{ id: USERDATA_ARROW }} />
+          <Pillar position={[5, 2.53, -5]} userData={{ id: USERDATA_PILLAR }} />
+          <Arrow position={[14, 1, 14]} userData={{ id: USERDATA_ARROW }} />
         </Physics>
       </Canvas>
 
@@ -113,6 +116,10 @@ const App = () => {
           Must run on descktop and fullscreen!
           <br />
           WASD to drive, space to brake
+          <br />
+          Rotate camera - hold LCM
+          <br />
+          Shift camera - Shift + hold LCM
           <br />R to reset
         </pre>
       </div>
