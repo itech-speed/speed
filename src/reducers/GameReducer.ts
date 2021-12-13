@@ -2,21 +2,21 @@ import { createSlice } from '@reduxjs/toolkit'
 import { TEndGameState } from 'src/types/EndGameState'
 
 interface IState {
-  num: number
+  level: number
   endGameState: TEndGameState
 }
 
 const initialState: IState = {
-  num: 1,
+  level: 1,
   endGameState: null,
 }
 
-const CarReducer = createSlice({
-  name: 'car',
+const GameReducer = createSlice({
+  name: 'game',
   initialState,
   reducers: {
     setNumber(state, { payload }) {
-      state.num = payload
+      state.level = payload
     },
     setEndGameState(state, { payload }) {
       state.endGameState = payload
@@ -24,5 +24,5 @@ const CarReducer = createSlice({
   },
 })
 
-export default CarReducer.reducer
-export const { setNumber, setEndGameState } = CarReducer.actions
+export default GameReducer.reducer
+export const { setNumber, setEndGameState } = GameReducer.actions

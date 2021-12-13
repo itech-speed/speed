@@ -2,18 +2,22 @@ import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
 import { useDispatch, useSelector } from 'react-redux'
 import Beetle from 'src/components/Levels/Beetle'
+import LevelBuilder from 'src/components/Levels/LevelBuilder'
 import Plane from 'src/components/Levels/Plane'
 import EndGameModal from 'src/components/modals/EndGameModal'
 import { AppDispatch, RootState } from 'src/reducers'
-import { setEndGameState } from 'src/reducers/CarReducer'
+import { setEndGameState } from 'src/reducers/GameReducer'
 import levelsConfig from 'src/res/LevelsConfig'
 import { TEndGameState } from 'src/types/EndGameState'
 
-import LevelBuilder from '../Levels/LevelBuilder'
-
 const App = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const endGameState = useSelector((state: RootState) => state.car.endGameState)
+  const endGameState = useSelector(
+    (state: RootState) => state.game.endGameState,
+  )
+
+  const gameLvl = useSelector((state: RootState) => state.game.level)
+  console.log(gameLvl)
 
   const onGameEnded = (endState: TEndGameState) => {
     dispatch(setEndGameState(endState))

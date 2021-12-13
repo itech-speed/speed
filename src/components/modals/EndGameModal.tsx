@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { setEndGameState } from 'src/reducers/CarReducer'
+import { setEndGameState } from 'src/reducers/GameReducer'
 
 interface IProps {
   className: string
@@ -11,7 +11,7 @@ const EndGameModal = ({ className, text }: IProps) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const listenerFunc = (event: any) => {
+    const listenerFunc = (event: KeyboardEvent) => {
       if (event.key === 'r') {
         dispatch(setEndGameState(null))
       }

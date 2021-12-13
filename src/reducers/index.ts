@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import CarReducer from './CarReducer'
+import GameReducer from './GameReducer'
 
 const store = configureStore({
   reducer: {
-    car: CarReducer,
+    game: GameReducer,
   },
 })
 export default store
