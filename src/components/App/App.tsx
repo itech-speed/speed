@@ -1,4 +1,4 @@
-import { Physics, useCylinder, usePlane } from '@react-three/cannon'
+import { Physics, useBox, useCylinder, usePlane } from '@react-three/cannon'
 import { CylinderProps, PlaneProps } from '@react-three/cannon/dist/hooks'
 import { Canvas } from '@react-three/fiber'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,6 +33,18 @@ const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }: CylinderProps) => {
       <cylinderGeometry args={args} />
       <meshStandardMaterial color="#333" />
     </mesh>
+  )
+}
+
+const Stone = ({ args = [40, 4, 2], ...props }: any) => {
+  const [ref] = useBox(() => ({ type: 'Static', args, ...props }))
+  return (
+    <>
+      <mesh ref={ref} castShadow>
+        <boxGeometry args={args} />
+        <meshStandardMaterial color="#47614f" />
+      </mesh>
+    </>
   )
 }
 
@@ -74,10 +86,25 @@ const App = () => {
             userData={{ id: 'floor' }}
           />
 
-          <Beetle position={[0, 1, 0]} onGameEnded={onGameEnded} />
+          <Beetle position={[-16, 1, -16]} onGameEnded={onGameEnded} />
+
+          <group>
+            <Stone position={[0, 0, -20]} userData={{ id: USERDATA_PILLAR }} />
+            <Stone position={[0, 0, 20]} userData={{ id: USERDATA_PILLAR }} />
+            <Stone
+              position={[19, 0, 0]}
+              rotation={[0, Math.PI / 2, 0]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+            <Stone
+              position={[-19, 0, 0]}
+              rotation={[0, Math.PI / 2, 0]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+          </group>
 
           <Pillar position={[5, 2.5, -5]} userData={{ id: USERDATA_PILLAR }} />
-          <Arrow position={[5, 2, 5]} userData={{ id: USERDATA_ARROW }} />
+          <Arrow position={[5, 1, 5]} userData={{ id: USERDATA_ARROW }} />
         </Physics>
       </Canvas>
 

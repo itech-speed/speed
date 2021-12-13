@@ -24,7 +24,7 @@ const Arrow = ({ ...props }: any) => {
           scale={[0.3, 0.35, 0.3]}
           geometry={nodes.Cylinder.geometry}
           material={materials['Material.001']}
-          position={[0, 0, 0]}
+          position={[0, 0.7, 0]}
           rotation={[Math.PI, 0, 0]}
         />
       </group>
