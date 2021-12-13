@@ -106,8 +106,38 @@ const App = () => {
             />
           </group>
 
-          <Pillar position={[5, 2.53, -5]} userData={{ id: USERDATA_PILLAR }} />
-          <Arrow position={[14, 1, 14]} userData={{ id: USERDATA_ARROW }} />
+          <group>
+            <Stone
+              args={[12, 4, 2]}
+              position={[-10, 0, -10]}
+              rotation={[0, Math.PI / 2, 0]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+            <Stone
+              args={[10, 4, 2]}
+              position={[-2, 0, -2]}
+              rotation={[0, Math.PI / 2, 0]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+            <Stone
+              args={[16, 4, 2]}
+              position={[-10, 0, 2]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+            <Stone
+              args={[16, 4, 2]}
+              position={[-10, 0, 8]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+            <Stone
+              args={[10, 4, 2]}
+              position={[8, 0, -6]}
+              userData={{ id: USERDATA_PILLAR }}
+            />
+          </group>
+
+          <Pillar position={[2, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
+          <Arrow position={[-14, 1, 5]} userData={{ id: USERDATA_ARROW }} />
         </Physics>
       </Canvas>
 
