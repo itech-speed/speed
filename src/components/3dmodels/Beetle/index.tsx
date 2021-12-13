@@ -8,6 +8,7 @@ import BeetleHull from './BeetleHull'
 import BeetleWheel from './BeetleWheel'
 
 function Beetle({
+  onGameEnded,
   radius = 0.7,
   width = 1.2,
   height = -0.04,
@@ -17,7 +18,7 @@ function Beetle({
   force = 2000,
   maxBrake = 1e5,
   ...props
-}) {
+}: any) {
   const chassis = useRef()
   const wheel1 = useRef()
   const wheel2 = useRef()
@@ -75,8 +76,6 @@ function Beetle({
   }))
 
   useFrame(() => {
-    console.log(vehicle.current)
-
     const { forward, backward, left, right, brake, reset } = controls.current
     for (let e = 2; e < 4; e++) {
       api.applyEngineForce(
@@ -111,6 +110,7 @@ function Beetle({
       <group ref={vehicle} position={[0, -0.43, 0]}>
         <BeetleHull
           ref={chassis}
+          onGameEnded={onGameEnded}
           rotation={props.rotation}
           position={props.position}
           angularVelocity={props.angularVelocity}

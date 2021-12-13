@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.4.2",
+    "@craco/craco": "^6.4.3",
     "@react-three/cannon": "^4.2.0",
     "@react-three/drei": "^7.27.3",
     "@react-three/fiber": "^7.0.21",
@@ -29,6 +29,7 @@
     "typescript": "tsc --noEmit"
   },
   "devDependencies": {
+    "@react-three/gltfjsx": "^4.3.4",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",

@@ -1,7 +1,14 @@
 import { Physics, useCylinder, usePlane } from '@react-three/cannon'
 import { CylinderProps, PlaneProps } from '@react-three/cannon/dist/hooks'
 import { Canvas } from '@react-three/fiber'
+import { useDispatch, useSelector } from 'react-redux'
+import Arrow from 'src/components/3dmodels/Arrow'
 import Beetle from 'src/components/3dmodels/Beetle'
+import EndGameModal from 'src/components/modals/EndGameModal'
+import { AppDispatch, RootState } from 'src/reducers'
+import { setEndGameState } from 'src/reducers/CarReducer'
+import { USERDATA_ARROW, USERDATA_PILLAR } from 'src/res/userDataName'
+import { TEndGameState } from 'src/types/EndGameState'
 
 const Plane = (props: PlaneProps) => {
   const [ref] = usePlane(() => ({
@@ -30,8 +37,15 @@ const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }: CylinderProps) => {
 }
 
 const App = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const endGameState = useSelector((state: RootState) => state.car.endGameState)
+
+  const onGameEnded = (endState: TEndGameState) => {
+    dispatch(setEndGameState(endState))
+  }
+
   return (
-    <div className="app">
+    <div className="app relative">
       <header className="App-header"></header>
       <Canvas dpr={[1, 1.5]} shadows camera={{ position: [0, 5, 15], fov: 50 }}>
         <color attach="background" args={['#e8fffe']} />
@@ -60,9 +74,10 @@ const App = () => {
             userData={{ id: 'floor' }}
           />
 
-          <Beetle position={[0, 1, 0]} />
+          <Beetle position={[0, 1, 0]} onGameEnded={onGameEnded} />
 
-          <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
+          <Pillar position={[5, 2.5, -5]} userData={{ id: USERDATA_PILLAR }} />
+          <Arrow position={[5, 2, 5]} userData={{ id: USERDATA_ARROW }} />
         </Physics>
       </Canvas>
 
@@ -74,6 +89,9 @@ const App = () => {
           <br />R to reset
         </pre>
       </div>
+      {endGameState !== null && (
+        <EndGameModal className="absolute inset-0" text={endGameState} />
+      )}
     </div>
   )
 }
