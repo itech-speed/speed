@@ -1,7 +1,7 @@
 import { useBox } from '@react-three/cannon'
 import { useGLTF } from '@react-three/drei'
 import { forwardRef } from 'react'
-import { USERDATA_ARROW, USERDATA_PILLAR } from 'src/res/userDataName'
+import { USERDATA_ARROW, USERDATA_WALL } from 'src/res/userDataName'
 
 useGLTF.preload('/3dmodels/Beetle.glb')
 
@@ -17,7 +17,7 @@ const BeetleHull = forwardRef(
         onCollide: (e) => {
           if (e.body.userData.id === USERDATA_ARROW) {
             onGameEnded('victory')
-          } else if (e.body.userData.id === USERDATA_PILLAR) {
+          } else if (e.body.userData.id === USERDATA_WALL) {
             onGameEnded('defeat')
           }
         },

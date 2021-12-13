@@ -7,7 +7,11 @@ import Beetle from 'src/components/3dmodels/Beetle'
 import EndGameModal from 'src/components/modals/EndGameModal'
 import { AppDispatch, RootState } from 'src/reducers'
 import { setEndGameState } from 'src/reducers/CarReducer'
-import { USERDATA_ARROW, USERDATA_PILLAR } from 'src/res/userDataName'
+import {
+  USERDATA_ARROW,
+  USERDATA_PILLAR,
+  USERDATA_WALL,
+} from 'src/res/userDataName'
 import { TEndGameState } from 'src/types/EndGameState'
 
 const Plane = (props: PlaneProps) => {
@@ -92,17 +96,17 @@ const App = () => {
           <Beetle position={[-16, 1, -16]} onGameEnded={onGameEnded} />
 
           <group>
-            <Stone position={[0, 0, -20]} userData={{ id: USERDATA_PILLAR }} />
-            <Stone position={[0, 0, 20]} userData={{ id: USERDATA_PILLAR }} />
+            <Stone position={[0, 0, -20]} userData={{ id: USERDATA_WALL }} />
+            <Stone position={[0, 0, 20]} userData={{ id: USERDATA_WALL }} />
             <Stone
               position={[19, 0, 0]}
               rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
             <Stone
               position={[-19, 0, 0]}
               rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
           </group>
 
@@ -111,32 +115,60 @@ const App = () => {
               args={[12, 4, 2]}
               position={[-10, 0, -10]}
               rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
             <Stone
               args={[10, 4, 2]}
               position={[-2, 0, -2]}
               rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
             <Stone
               args={[16, 4, 2]}
               position={[-10, 0, 2]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
             <Stone
               args={[10, 4, 1]}
               position={[-14, 0, 6.5]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
             <Stone
               args={[10, 4, 2]}
               position={[8, 0, -6]}
-              userData={{ id: USERDATA_PILLAR }}
+              userData={{ id: USERDATA_WALL }}
             />
           </group>
 
           <Pillar position={[2, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[2, 2.5, 0]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 0]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 0]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[2, 2.5, 2]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 2]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 2]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[2, 2.5, 4]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 4]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 4]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[2, 2.5, 6]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 6]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 6]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[2, 2.5, 8]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 8]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 8]} userData={{ id: USERDATA_PILLAR }} />
+
+          <Pillar position={[2, 2.5, 11]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 11]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 11]} userData={{ id: USERDATA_PILLAR }} />
+
+          <Pillar position={[2, 2.5, 14]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 14]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 14]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[2, 2.5, 16]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[4, 2.5, 16]} userData={{ id: USERDATA_PILLAR }} />
+          <Pillar position={[6, 2.5, 16]} userData={{ id: USERDATA_PILLAR }} />
           <Arrow position={[-16, 1, 4.5]} userData={{ id: USERDATA_ARROW }} />
         </Physics>
       </Canvas>
