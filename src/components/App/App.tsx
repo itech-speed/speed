@@ -125,8 +125,8 @@ const App = () => {
               userData={{ id: USERDATA_PILLAR }}
             />
             <Stone
-              args={[16, 4, 2]}
-              position={[-10, 0, 8]}
+              args={[10, 4, 1]}
+              position={[-14, 0, 6.5]}
               userData={{ id: USERDATA_PILLAR }}
             />
             <Stone
@@ -137,7 +137,7 @@ const App = () => {
           </group>
 
           <Pillar position={[2, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
-          <Arrow position={[-14, 1, 5]} userData={{ id: USERDATA_ARROW }} />
+          <Arrow position={[-16, 1, 4.5]} userData={{ id: USERDATA_ARROW }} />
         </Physics>
       </Canvas>
 
