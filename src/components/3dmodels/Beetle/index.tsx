@@ -98,12 +98,14 @@ function Beetle({
         props.position[1],
         props.position[2],
       )
+
       // @ts-ignore
       chassis.current.api.velocity.set(0, 0, 0)
       // @ts-ignore
       chassis.current.api.angularVelocity.set(0, 1, 0)
       // @ts-ignore
-      chassis.current.api.rotation.set(0, -Math.PI / 4, 0)
+      chassis.current.api.rotation.set(0, 0.13, 0)
+      // chassis.current.api.rotation.set(0, -Math.PI / 4, 0)
     }
   })
 
