@@ -24,6 +24,8 @@ function Beetle({
   const wheel4 = useRef()
   const controls = useMoveControls()
 
+  const camera = useRef()
+
   const wheelInfo = {
     radius,
     directionLocal: [0, -1, 0],
@@ -72,6 +74,8 @@ function Beetle({
   }))
 
   useFrame(() => {
+    console.log(vehicle.current)
+
     const { forward, backward, left, right, brake, reset } = controls.current
     for (let e = 2; e < 4; e++) {
       api.applyEngineForce(
@@ -87,7 +91,11 @@ function Beetle({
     for (let b = 2; b < 4; b++) api.setBrake(brake ? maxBrake : 0, b)
     if (reset) {
       // @ts-ignore
-      chassis.current.api.position.set(0, 1, 0)
+      chassis.current.api.position.set(
+        props.position[0],
+        props.position[1],
+        props.position[2],
+      )
       // @ts-ignore
       chassis.current.api.velocity.set(0, 0, 0)
       // @ts-ignore
@@ -99,7 +107,7 @@ function Beetle({
 
   return (
     <>
-      <group ref={vehicle} position={[0, 0, 0]}>
+      <group ref={vehicle} position={[0, -0.43, 0]}>
         <BeetleHull
           ref={chassis}
           rotation={props.rotation}
@@ -112,6 +120,19 @@ function Beetle({
         <BeetleWheel ref={wheel3} radius={radius} leftSide />
         <BeetleWheel ref={wheel4} radius={radius} />
       </group>
+      {/* 
+      @ts-ignore */}
+      <PerspectiveCamera
+        ref={camera}
+        position={[-7.36, 9.32, -6.94]}
+        rotation={[-2.21, -0.518, -2.518]}
+        near={0.01}
+        far={1000}
+        makeDefault
+      />
+      {/* 
+      @ts-ignore */}
+      <OrbitControls screenSpacePanning={false} />
     </>
   )
 }

@@ -1,9 +1,9 @@
 import { Physics, useCylinder, usePlane } from '@react-three/cannon'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { CylinderProps, PlaneProps } from '@react-three/cannon/dist/hooks'
 import { Canvas } from '@react-three/fiber'
 import Beetle from 'src/components/3dmodels/Beetle'
 
-const Plane = (props: any) => {
+const Plane = (props: PlaneProps) => {
   const [ref] = usePlane(() => ({
     type: 'Static',
     material: 'ground',
@@ -19,8 +19,7 @@ const Plane = (props: any) => {
   )
 }
 
-const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }) => {
-  // @ts-ignore
+const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }: CylinderProps) => {
   const [ref] = useCylinder(() => ({ mass: 10, args, ...props }))
   return (
     <mesh ref={ref} castShadow>
@@ -55,9 +54,13 @@ const App = () => {
           allowSleep
         >
           {/* contact groud */}
-          <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: 'floor' }} />
+          <Plane
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, 0, 0]}
+            userData={{ id: 'floor' }}
+          />
 
-          <Beetle position={[0, 2, 0]} rotation={[0, -Math.PI / 4, 0]} />
+          <Beetle position={[0, 1, 0]} />
 
           <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
         </Physics>

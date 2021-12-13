@@ -1,6 +1,6 @@
 import { useBox } from '@react-three/cannon'
 import { useGLTF } from '@react-three/drei'
-import { forwardRef, useRef } from 'react'
+import { forwardRef } from 'react'
 
 useGLTF.preload('/3dmodels/Beetle.glb')
 
@@ -18,13 +18,11 @@ const BeetleHull = forwardRef(
       }),
       ref,
     )
-    const camera = useRef()
 
     return (
       <mesh ref={ref} api={api}>
         <group position={[0, -0.6, 0]}>
           <mesh
-            ref={camera}
             castShadow
             material={materials['Black paint']}
             geometry={nodes.chassis_1.geometry}
