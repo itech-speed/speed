@@ -1,5 +1,5 @@
 import { Physics, useCylinder, usePlane } from '@react-three/cannon'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Beetle from 'src/components/3dmodels/Beetle'
 
@@ -23,12 +23,10 @@ const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }) => {
   // @ts-ignore
   const [ref] = useCylinder(() => ({ mass: 10, args, ...props }))
   return (
-    <>
-      <mesh ref={ref} castShadow>
-        <cylinderGeometry args={args} />
-        <meshStandardMaterial color="#333" />
-      </mesh>
-    </>
+    <mesh ref={ref} castShadow>
+      <cylinderGeometry args={args} />
+      <meshStandardMaterial color="#333" />
+    </mesh>
   )
 }
 
@@ -59,10 +57,23 @@ const App = () => {
           {/* contact groud */}
           <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: 'floor' }} />
 
-          <Beetle />
+          <Beetle position={[0, 2, 0]} rotation={[0, -Math.PI / 4, 0]} />
 
           <Pillar position={[5, 2.5, -5]} userData={{ id: 'pillar-1' }} />
         </Physics>
+
+        {/* 
+      @ts-ignore */}
+        <PerspectiveCamera
+          position={[0, 3, -6]}
+          rotation={[0, 3.14, 0]}
+          near={0.01}
+          far={1000}
+          makeDefault
+        />
+        {/* 
+      @ts-ignore */}
+        <OrbitControls screenSpacePanning={false} />
       </Canvas>
 
       <div style={{ position: 'absolute', top: 30, left: 40 }}>

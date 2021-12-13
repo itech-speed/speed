@@ -1,5 +1,4 @@
 import { useRaycastVehicle } from '@react-three/cannon'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useMoveControls } from 'src/hooks/useCarControl'
@@ -24,8 +23,6 @@ function Beetle({
   const wheel3 = useRef()
   const wheel4 = useRef()
   const controls = useMoveControls()
-
-  const camera = useRef()
 
   const wheelInfo = {
     radius,
@@ -76,11 +73,12 @@ function Beetle({
 
   useFrame(() => {
     const { forward, backward, left, right, brake, reset } = controls.current
-    for (let e = 2; e < 4; e++)
+    for (let e = 2; e < 4; e++) {
       api.applyEngineForce(
         forward || backward ? force * (forward && !backward ? -1 : 1) : 0,
         2,
       )
+    }
     for (let s = 0; s < 2; s++)
       api.setSteeringValue(
         left || right ? steer * (left && !right ? 1 : -1) : 0,
@@ -89,11 +87,11 @@ function Beetle({
     for (let b = 2; b < 4; b++) api.setBrake(brake ? maxBrake : 0, b)
     if (reset) {
       // @ts-ignore
-      chassis.current.api.position.set(0, 0.5, 0)
+      chassis.current.api.position.set(0, 1, 0)
       // @ts-ignore
       chassis.current.api.velocity.set(0, 0, 0)
       // @ts-ignore
-      chassis.current.api.angularVelocity.set(0, 0.5, 0)
+      chassis.current.api.angularVelocity.set(0, 1, 0)
       // @ts-ignore
       chassis.current.api.rotation.set(0, -Math.PI / 4, 0)
     }
@@ -114,19 +112,6 @@ function Beetle({
         <BeetleWheel ref={wheel3} radius={radius} leftSide />
         <BeetleWheel ref={wheel4} radius={radius} />
       </group>
-      {/* 
-      @ts-ignore */}
-      <PerspectiveCamera
-        // ref={vehicle}
-        position={[0, 3, -6]}
-        rotation={[0, 3.14, 0]}
-        near={0.01}
-        far={1000}
-        makeDefault
-      />
-      {/* 
-      @ts-ignore */}
-      <OrbitControls screenSpacePanning={false} />
     </>
   )
 }
