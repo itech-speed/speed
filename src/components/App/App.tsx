@@ -1,60 +1,15 @@
-import { Physics, useBox, useCylinder, usePlane } from '@react-three/cannon'
-import { CylinderProps, PlaneProps } from '@react-three/cannon/dist/hooks'
+import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
 import { useDispatch, useSelector } from 'react-redux'
-import Arrow from 'src/components/3dmodels/Arrow'
-import Beetle from 'src/components/3dmodels/Beetle'
+import Beetle from 'src/components/Levels/Beetle'
+import Plane from 'src/components/Levels/Plane'
 import EndGameModal from 'src/components/modals/EndGameModal'
 import { AppDispatch, RootState } from 'src/reducers'
 import { setEndGameState } from 'src/reducers/CarReducer'
-import {
-  USERDATA_ARROW,
-  USERDATA_PILLAR,
-  USERDATA_WALL,
-} from 'src/res/userDataName'
+import levelsConfig from 'src/res/LevelsConfig'
 import { TEndGameState } from 'src/types/EndGameState'
 
-const Plane = (props: PlaneProps) => {
-  const [ref] = usePlane(() => ({
-    type: 'Static',
-    material: 'ground',
-    ...props,
-  }))
-  return (
-    <group ref={ref}>
-      <mesh receiveShadow>
-        <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color="#3b663d" />
-      </mesh>
-    </group>
-  )
-}
-
-const Pillar = ({ args = [0.7, 0.7, 5, 16], ...props }: CylinderProps) => {
-  const [ref] = useCylinder(() => ({
-    mass: 10,
-    args,
-    ...props,
-  }))
-  return (
-    <mesh ref={ref} castShadow>
-      <cylinderGeometry args={args} />
-      <meshStandardMaterial color="#4d413f" />
-    </mesh>
-  )
-}
-
-const Stone = ({ args = [40, 4, 2], ...props }: any) => {
-  const [ref] = useBox(() => ({ type: 'Static', args, ...props }))
-  return (
-    <>
-      <mesh ref={ref} castShadow>
-        <boxGeometry args={args} />
-        <meshStandardMaterial color="#818a83" />
-      </mesh>
-    </>
-  )
-}
+import LevelBuilder from '../Levels/LevelBuilder'
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -88,88 +43,15 @@ const App = () => {
         >
           {/* contact groud */}
           <Plane
+            type="Static"
             rotation={[-Math.PI / 2, 0, 0]}
             position={[0, 0, 0]}
             userData={{ id: 'floor' }}
           />
 
-          <Beetle position={[-16, 1, -16]} onGameEnded={onGameEnded} />
+          <Beetle {...levelsConfig[1].car} onGameEnded={onGameEnded} />
 
-          <group>
-            <Stone position={[0, 0, -20]} userData={{ id: USERDATA_WALL }} />
-            <Stone position={[0, 0, 20]} userData={{ id: USERDATA_WALL }} />
-            <Stone
-              position={[19, 0, 0]}
-              rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_WALL }}
-            />
-            <Stone
-              position={[-19, 0, 0]}
-              rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_WALL }}
-            />
-          </group>
-
-          <group>
-            <Stone
-              args={[12, 4, 2]}
-              position={[-10, 0, -10]}
-              rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_WALL }}
-            />
-            <Stone
-              args={[10, 4, 2]}
-              position={[-2, 0, -2]}
-              rotation={[0, Math.PI / 2, 0]}
-              userData={{ id: USERDATA_WALL }}
-            />
-            <Stone
-              args={[16, 4, 2]}
-              position={[-10, 0, 2]}
-              userData={{ id: USERDATA_WALL }}
-            />
-            <Stone
-              args={[10, 4, 1]}
-              position={[-14, 0, 6.5]}
-              userData={{ id: USERDATA_WALL }}
-            />
-            <Stone
-              args={[10, 4, 2]}
-              position={[8, 0, -6]}
-              userData={{ id: USERDATA_WALL }}
-            />
-          </group>
-
-          <Pillar position={[2, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, -2]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[2, 2.5, 0]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 0]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 0]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[2, 2.5, 2]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 2]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 2]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[2, 2.5, 4]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 4]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 4]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[2, 2.5, 6]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 6]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 6]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[2, 2.5, 8]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 8]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 8]} userData={{ id: USERDATA_PILLAR }} />
-
-          <Pillar position={[2, 2.5, 11]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 11]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 11]} userData={{ id: USERDATA_PILLAR }} />
-
-          <Pillar position={[2, 2.5, 14]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 14]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 14]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[2, 2.5, 16]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[4, 2.5, 16]} userData={{ id: USERDATA_PILLAR }} />
-          <Pillar position={[6, 2.5, 16]} userData={{ id: USERDATA_PILLAR }} />
-          <Arrow position={[-16, 1, 4.5]} userData={{ id: USERDATA_ARROW }} />
+          <LevelBuilder levelData={levelsConfig[1]} />
         </Physics>
       </Canvas>
 
