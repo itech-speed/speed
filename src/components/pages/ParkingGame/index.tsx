@@ -7,8 +7,10 @@ import Plane from 'src/components/Levels/Plane'
 import EndGameModal from 'src/components/modals/EndGameModal'
 import { AppDispatch, RootState } from 'src/reducers'
 import { setEndGameState } from 'src/reducers/GameReducer'
-import levelsConfig from 'src/res/LevelsConfig'
+import { levelsConfig } from 'src/res/LevelsConfig'
 import { TEndGameState } from 'src/types/EndGameState'
+
+import GameMenu from './GameMenu'
 
 const ParkinkGamePage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -24,7 +26,9 @@ const ParkinkGamePage = () => {
   }
 
   return (
-    <div className="app relative">
+    <div className="h-screen relative">
+      <GameMenu className="absolute z-50" />
+
       <Canvas dpr={[1, 1.5]} shadows camera={{ position: [0, 5, 15], fov: 50 }}>
         <color attach="background" args={['#e8fffe']} />
         <ambientLight intensity={0.6} />
@@ -58,18 +62,6 @@ const ParkinkGamePage = () => {
         </Physics>
       </Canvas>
 
-      <div style={{ position: 'absolute', top: 30, left: 40 }}>
-        <pre>
-          Must run on descktop and fullscreen!
-          <br />
-          WASD to drive, space to brake
-          <br />
-          Rotate camera - hold LCM
-          <br />
-          Shift camera - Shift + hold LCM
-          <br />R to reset
-        </pre>
-      </div>
       {endGameState !== null && (
         <EndGameModal className="absolute inset-0" text={endGameState} />
       )}
