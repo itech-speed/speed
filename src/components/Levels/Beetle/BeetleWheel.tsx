@@ -17,9 +17,11 @@ const BeetleWheel = forwardRef(
         args: [radius, radius, 0.5, 16],
         ...props,
       }),
+      // @ts-ignore
       ref,
     )
     return (
+      // @ts-ignore
       <mesh ref={ref}>
         <mesh rotation={[0, 0, ((leftSide ? 1 : -1) * Math.PI) / 2]}>
           <mesh material={materials.Rubber} geometry={nodes.wheel_1.geometry} />

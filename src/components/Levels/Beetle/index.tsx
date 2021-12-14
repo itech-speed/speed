@@ -1,8 +1,8 @@
 import { useRaycastVehicle } from '@react-three/cannon'
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
+import { useLayoutEffect, useRef } from 'react'
 import { useMoveControls } from 'src/hooks/useCarControl'
+import { PerspectiveCamera } from 'three'
 
 import BeetleHull from './BeetleHull'
 import BeetleWheel from './BeetleWheel'
@@ -19,14 +19,14 @@ function Beetle({
   maxBrake = 1e5,
   ...props
 }: any) {
+  const defaultCamera = useThree((state) => state.camera)
+
   const chassis = useRef()
   const wheel1 = useRef()
   const wheel2 = useRef()
   const wheel3 = useRef()
   const wheel4 = useRef()
   const controls = useMoveControls()
-
-  const camera = useRef()
 
   const wheelInfo = {
     radius,
@@ -65,8 +65,11 @@ function Beetle({
     chassisConnectionPointLocal: [width / 2, height, back],
   }
 
+  // @ts-ignore
   const [vehicle, api] = useRaycastVehicle(() => ({
+    // @ts-ignore
     chassisBody: chassis,
+    // @ts-ignore
     wheels: [wheel1, wheel2, wheel3, wheel4],
     // @ts-ignore
     wheelInfos: [wheelInfo1, wheelInfo2, wheelInfo3, wheelInfo4],
@@ -74,6 +77,16 @@ function Beetle({
     indexRightAxis: 0,
     indexUpAxis: 1,
   }))
+
+  useLayoutEffect(() => {
+    if (defaultCamera instanceof PerspectiveCamera) {
+      // @ts-ignore
+      defaultCamera.zoom = 3
+      defaultCamera.position.set(0, 30, -30)
+      // @ts-ignore
+      defaultCamera.lookAt(chassis.current.position)
+    }
+  }, [defaultCamera])
 
   useFrame(() => {
     const { forward, backward, left, right, brake, reset } = controls.current
@@ -112,6 +125,7 @@ function Beetle({
       <group ref={vehicle} position={[0, -0.43, 0]}>
         <BeetleHull
           ref={chassis}
+          //@ts-ignore
           onGameEnded={onGameEnded}
           rotation={props.rotation}
           position={props.position}
@@ -123,18 +137,8 @@ function Beetle({
         <BeetleWheel ref={wheel3} radius={radius} leftSide />
         <BeetleWheel ref={wheel4} radius={radius} />
       </group>
-      {/* 
-      @ts-ignore */}
-      <PerspectiveCamera
-        ref={camera}
-        position={[-24, 18, -26]}
-        near={0.01}
-        far={500}
-        makeDefault
-      />
-      {/* 
-      @ts-ignore */}
-      <OrbitControls screenSpacePanning={false} target={[-10, 1, -10]} />
+
+      {/*<OrbitControls screenSpacePanning={false} target={[-10, 1, -10]} />*/}
     </>
   )
 }
