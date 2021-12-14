@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import H6 from 'src/components/typo/H6'
+import { HREF_MENU } from 'src/res/routes'
 
 interface IProps {
   className?: string
@@ -8,9 +9,9 @@ interface IProps {
 const GameMenu = ({ className }: IProps) => {
   return (
     <div className={className}>
-      <div className="p-2 bg-black bg-opacity-60 text-white rounded-br-xl">
+      <div className="p-2 bg-black bg-opacity-60 text-white">
         <nav className="mb-3">
-          <Link to="/menu" onClick={() => console.log('awd')}>
+          <Link to={`/${HREF_MENU}`}>
             <H6 className="bg-blue-400  rounded inline-block px-2 py-1 hover:bg-blue-300">
               Menu
             </H6>
