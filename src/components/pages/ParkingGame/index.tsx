@@ -1,25 +1,33 @@
 import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import Beetle from 'src/components/Levels/Beetle'
 import LevelBuilder from 'src/components/Levels/LevelBuilder'
 import Plane from 'src/components/Levels/Plane'
 import EndGameModal from 'src/components/modals/EndGameModal'
 import { AppDispatch, RootState } from 'src/reducers'
 import { setEndGameState } from 'src/reducers/GameReducer'
-import { levelsConfig } from 'src/res/LevelsConfig'
+import { levelsConfigList } from 'src/res/LevelsConfig'
+import { SLUG_LEVEL } from 'src/res/routes'
 import { TEndGameState } from 'src/types/EndGameState'
 
 import GameMenu from './GameMenu'
 
 const ParkinkGamePage = () => {
+  const params = useParams()
+  console.log(params[SLUG_LEVEL])
+
+  const levelSlug = params[SLUG_LEVEL] || 1
+  const findedLevel = levelsConfigList.find(
+    (i) => i.id.toString() === levelSlug.toString(),
+  )
+  const curLevelConfig = findedLevel || levelsConfigList[0]
+
   const dispatch = useDispatch<AppDispatch>()
   const endGameState = useSelector(
     (state: RootState) => state.game.endGameState,
   )
-
-  const gameLvl = useSelector((state: RootState) => state.game.level)
-  console.log(gameLvl)
 
   const onGameEnded = (endState: TEndGameState) => {
     dispatch(setEndGameState(endState))
@@ -56,9 +64,9 @@ const ParkinkGamePage = () => {
             userData={{ id: 'floor' }}
           />
 
-          <Beetle {...levelsConfig[1].car} onGameEnded={onGameEnded} />
+          <Beetle {...curLevelConfig.car} onGameEnded={onGameEnded} />
 
-          <LevelBuilder levelData={levelsConfig[1]} />
+          <LevelBuilder levelData={curLevelConfig} />
         </Physics>
       </Canvas>
 

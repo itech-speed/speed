@@ -2,6 +2,7 @@ import { USERDATA_ARROW, USERDATA_PILLAR, USERDATA_WALL } from '../userDataName'
 
 export const level1 = {
   id: 1,
+  img: '/img/lvl1.png',
   car: {
     position: [-16, 1, -16],
   },
@@ -41,14 +42,7 @@ export const level1 = {
       args: [40, 4, 2],
       userData: { id: USERDATA_WALL },
     },
-    {
-      objectType: 'box',
-      type: 'Static',
-      position: [-10, 0, -10],
-      rotation: [0, Math.PI / 2, 0],
-      args: [12, 4, 2],
-      userData: { id: USERDATA_WALL },
-    },
+
     {
       objectType: 'box',
       type: 'Static',
@@ -63,26 +57,6 @@ export const level1 = {
       position: [-10, 0, 2],
       args: [16, 4, 2],
       userData: { id: USERDATA_WALL },
-    },
-    {
-      objectType: 'box',
-      type: 'Static',
-      position: [-14, 0, 6.5],
-      args: [10, 4, 1],
-      userData: { id: USERDATA_WALL },
-    },
-    {
-      objectType: 'box',
-      type: 'Static',
-      position: [8, 0, -6],
-      args: [10, 4, 2],
-      userData: { id: USERDATA_WALL },
-    },
-    {
-      objectType: 'cylinder',
-      type: 'Dynamic',
-      position: [2, 2.5, -2],
-      userData: { id: USERDATA_PILLAR },
     },
     {
       objectType: 'cylinder',
