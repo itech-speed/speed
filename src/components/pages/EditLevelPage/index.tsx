@@ -1,50 +1,59 @@
-import { OrbitControls, TransformControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useState } from 'react'
-import BoxFiber from 'src/components/levels/BoxFiber'
+import ObjectWithTransformControl from 'src/components/levels/ObjectWithTransformControl'
 import PlaneFiber from 'src/components/levels/PlaneFiber'
 import GameMenu from 'src/components/ui/GameMenu'
 import ModelListSideMenu from 'src/components/ui/ModelListSideMenu'
 import { useKeyPress } from 'src/hooks/useKeyPress'
-// import create from 'zustand'
+import { EditMode } from 'src/types/EditMode'
+import create from 'zustand'
 
-// const [useStore] = create((set) => ({
-//   count: 0,
-//   welcome: true,
-//   api: {
-//     pong(velocity) {
-//       ping.currentTime = 0
-//       ping.volume = clamp(velocity / 20, 0, 1)
-//       ping.play()
-//       if (velocity > 4) set((state) => ({ count: state.count + 1 }))
-//     },
-//     reset: (welcome) =>
-//       set((state) => ({ welcome, count: welcome ? state.count : 0 })),
-//   },
-// }))
-
-// const [useStore] = create((set) => ({
-//   objects: [],
-//   api: {
-//     addObject(object) {
-
-//       set((state) => ({...state, objects}))
-//     }
-//   }
-// }))
+const [useStore]: any = create((set: any) => ({
+  objects: [
+    {
+      id: '1',
+      objectType: 'box',
+      position: [0, 0.5, 0],
+    },
+    {
+      id: '2',
+      objectType: 'box',
+      position: [10, 0.5, 0],
+    },
+    {
+      id: '3',
+      objectType: 'box',
+      position: [20, 0.5, 0],
+    },
+  ],
+  api: {
+    addObject(object: any) {
+      set((state: any) => ({ ...state, objects: [...state.objects, object] }))
+    },
+  },
+}))
 
 const EditLevelPage = () => {
-  const [editMode, setEditMode] = useState('translate')
+  // const objectCounter = useRef(0)
+  const [editMode, setEditMode] = useState(EditMode.Translate)
   const [selectedObjId, setSelectedObjId] = useState<string | null>(null)
 
   useKeyPress(['w', 'e', 'r'], (pressed: boolean, key: string) => {
     if (pressed) {
-      const mode = key === 'r' ? 'scale' : key === 'e' ? 'rotate' : 'translate'
+      const mode =
+        key === 'r'
+          ? EditMode.Scale
+          : key === 'e'
+          ? EditMode.Rotate
+          : EditMode.Translate
       setEditMode(mode)
     }
   })
 
-  // const welcome = useStore((state) => state.welcome)
+  const objects = useStore((state: any) => state.objects)
+  console.log(objects)
+
   // const { pong } = useStore((state) => state.api)
 
   return (
@@ -63,48 +72,35 @@ const EditLevelPage = () => {
           castShadow
           penumbra={1}
         />
+
         <PlaneFiber rotation={[-Math.PI / 2, 0, 0]} receiveShadow />
-        <TransformControls
-          showZ={selectedObjId === '1'}
-          showY={selectedObjId === '1'}
-          showX={selectedObjId === '1'}
-          enabled={selectedObjId === '1'}
-          onClick={() => setSelectedObjId('1')}
-          onMouseDown={(e) => {
-            console.log(e)
-          }}
-          mode={editMode}
+
+        <ObjectWithTransformControl
+          editMode={editMode}
+          id="1"
+          selectedObjId={selectedObjId}
+          onClick={setSelectedObjId}
           position={[0, 0.5, 0]}
-        >
-          <BoxFiber castShadow />
-        </TransformControls>
+          objectType="box"
+        />
 
-        <TransformControls
-          showZ={selectedObjId === '2'}
-          showY={selectedObjId === '2'}
-          showX={selectedObjId === '2'}
-          enabled={selectedObjId === '2'}
-          onClick={() => setSelectedObjId('2')}
-          mode={editMode}
+        <ObjectWithTransformControl
+          editMode={editMode}
+          id="2"
+          selectedObjId={selectedObjId}
+          onClick={setSelectedObjId}
           position={[10, 0.5, 0]}
-        >
-          <BoxFiber castShadow />
-        </TransformControls>
+          objectType="box"
+        />
 
-        <TransformControls
-          showZ={selectedObjId === '3'}
-          showY={selectedObjId === '3'}
-          showX={selectedObjId === '3'}
-          enabled={selectedObjId === '3'}
-          onClick={(e) => {
-            console.log(e)
-            setSelectedObjId('3')
-          }}
-          mode={editMode}
+        <ObjectWithTransformControl
+          editMode={editMode}
+          id="3"
+          selectedObjId={selectedObjId}
+          onClick={setSelectedObjId}
           position={[20, 0.5, 0]}
-        >
-          <BoxFiber castShadow />
-        </TransformControls>
+          objectType="box"
+        />
 
         <OrbitControls makeDefault />
       </Canvas>
