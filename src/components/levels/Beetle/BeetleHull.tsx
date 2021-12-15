@@ -48,7 +48,12 @@ const BeetleHull = forwardRef<any>(
           rotation={[0, Math.PI, 0]}
           position={[0, 10, -20]}
         />
-        <OrbitControls screenSpacePanning={false} position={[10, 10, -20]} />
+        <OrbitControls
+          screenSpacePanning={false}
+          position={[10, 10, -20]}
+          maxPolarAngle={Math.PI / 2.5}
+          maxDistance={60}
+        />
         {/*<OrbitControls screenSpacePanning={false} position={[-15, 1, -10]} />*/}
         <group position={[0, -0.6, 0]}>
           <mesh

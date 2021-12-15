@@ -8,7 +8,7 @@
   "start_url": ".",
   "icons": [
     {
-      "src": "./parking.png",
+      "src": "parking.png",
       "type": "image/png",
       "sizes": "512x512"
     }
