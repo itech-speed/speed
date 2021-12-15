@@ -1,4 +1,4 @@
-import { useRaycastVehicle } from '@react-three/cannon'
+import { useRaycastVehicle, WheelInfoOptions } from '@react-three/cannon'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useLayoutEffect, useRef } from 'react'
 import { useMoveControls } from 'src/hooks/useCarControl'
@@ -21,14 +21,14 @@ function Beetle({
 }: any) {
   const defaultCamera = useThree((state) => state.camera)
 
-  const chassis = useRef()
-  const wheel1 = useRef()
-  const wheel2 = useRef()
-  const wheel3 = useRef()
-  const wheel4 = useRef()
+  const chassis = useRef(null)
+  const wheel1 = useRef(null)
+  const wheel2 = useRef(null)
+  const wheel3 = useRef(null)
+  const wheel4 = useRef(null)
   const controls = useMoveControls()
 
-  const wheelInfo = {
+  const wheelInfo: WheelInfoOptions = {
     radius,
     directionLocal: [0, -1, 0],
     suspensionStiffness: 30,
@@ -44,34 +44,30 @@ function Beetle({
     frictionSlip: 2,
   }
 
-  const wheelInfo1 = {
+  const wheelInfo1: WheelInfoOptions = {
     ...wheelInfo,
     isFrontWheel: true,
     chassisConnectionPointLocal: [-width / 2, height, front],
   }
-  const wheelInfo2 = {
+  const wheelInfo2: WheelInfoOptions = {
     ...wheelInfo,
     isFrontWheel: true,
     chassisConnectionPointLocal: [width / 2, height, front],
   }
-  const wheelInfo3 = {
+  const wheelInfo3: WheelInfoOptions = {
     ...wheelInfo,
     isFrontWheel: false,
     chassisConnectionPointLocal: [-width / 2, height, back],
   }
-  const wheelInfo4 = {
+  const wheelInfo4: WheelInfoOptions = {
     ...wheelInfo,
     isFrontWheel: false,
     chassisConnectionPointLocal: [width / 2, height, back],
   }
 
-  // @ts-ignore
   const [vehicle, api] = useRaycastVehicle(() => ({
-    // @ts-ignore
     chassisBody: chassis,
-    // @ts-ignore
     wheels: [wheel1, wheel2, wheel3, wheel4],
-    // @ts-ignore
     wheelInfos: [wheelInfo1, wheelInfo2, wheelInfo3, wheelInfo4],
     indexForwardAxis: 2,
     indexRightAxis: 0,
@@ -82,7 +78,8 @@ function Beetle({
     if (defaultCamera instanceof PerspectiveCamera) {
       // @ts-ignore
       defaultCamera.zoom = 3
-      defaultCamera.position.set(16, 30, -30)
+      // defaultCamera.position.set(16, 30, -30)
+      defaultCamera.position.set(-1, 30, -30)
       // @ts-ignore
       defaultCamera.lookAt(chassis.current.position)
     }
@@ -102,7 +99,7 @@ function Beetle({
         s,
       )
     for (let b = 2; b < 4; b++) api.setBrake(brake ? maxBrake : 0, b)
-    if (reset) {
+    if (reset && chassis.current) {
       // @ts-ignore
       chassis.current.api.position.set(
         props.position[0],

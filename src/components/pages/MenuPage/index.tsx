@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import H6 from 'src/components/typo/H6'
-import { LogoImg } from 'src/res/images'
+import { AddImg, LogoImg } from 'src/res/images'
 import { levelsConfigList } from 'src/res/LevelsConfig'
-import { HREF_LEVEL } from 'src/res/routes'
+import { HREF_LEVEL, PATH_LEVEL_CREATE } from 'src/res/routes'
 
 const MenuPage = () => {
   return (
-    <div>
+    <>
       <header className="bg-gray-200">
         <div className="pt-2 pb-3 container">
           <div className="flex items-center space-x-2">
@@ -16,17 +16,29 @@ const MenuPage = () => {
         </div>
       </header>
 
-      <div className="container mt-5 flex flex-wrap space-x-4">
-        {levelsConfigList.map((i) => (
+      <main className="container mt-5">
+        <H6>Compain levels:</H6>
+        <div className="mt-2 flex flex-wrap space-x-4">
+          {levelsConfigList.map((i) => (
+            <LevelCard
+              key={i.id}
+              path={`/${HREF_LEVEL}/${i.id}`}
+              imgLink={i.img}
+              title={`Level ${i.id}`}
+            />
+          ))}
+        </div>
+
+        <H6 className="mt-5">Custom levels:</H6>
+        <div className="mt-2 flex flex-wrap space-x-4">
           <LevelCard
-            key={i.id}
-            path={`/${HREF_LEVEL}/${i.id}`}
-            imgLink={i.img}
-            title={`Level ${i.id}`}
+            path={`/${HREF_LEVEL}/${PATH_LEVEL_CREATE}`}
+            imgLink={AddImg}
+            title={`Create level`}
           />
-        ))}
-      </div>
-    </div>
+        </div>
+      </main>
+    </>
   )
 }
 

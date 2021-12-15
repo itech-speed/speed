@@ -1,22 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
-export const useKeyPress = (
-  target: string[],
-  event: (cur: boolean) => void,
-) => {
-  useEffect(() => {
-    const downHandler = ({ key }: any) =>
-      target.indexOf(key) !== -1 && event(true)
-    const upHandler = ({ key }: any) =>
-      target.indexOf(key) !== -1 && event(false)
-    window.addEventListener('keydown', downHandler)
-    window.addEventListener('keyup', upHandler)
-    return () => {
-      window.removeEventListener('keydown', downHandler)
-      window.removeEventListener('keyup', upHandler)
-    }
-  }, [])
-}
+import { useKeyPress } from './useKeyPress'
 
 export interface IKeysProps {
   forward: boolean
