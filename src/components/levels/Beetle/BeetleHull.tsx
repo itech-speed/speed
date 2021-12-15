@@ -1,6 +1,4 @@
 import { CollideEvent, useBox } from '@react-three/cannon'
-import { PerspectiveCamera, useGLTF } from '@react-three/drei'
-import { useBox } from '@react-three/cannon'
 import { OrbitControls, PerspectiveCamera, useGLTF } from '@react-three/drei'
 import { forwardRef } from 'react'
 import { USERDATA_ARROW, USERDATA_WALL } from 'src/res/userDataName'
