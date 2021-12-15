@@ -1,9 +1,6 @@
-import {
-  USERDATA_ARROW,
-  USERDATA_PILLAR,
-  USERDATA_WALL,
-} from 'src/res/userDataName'
 import { ILevelConfig } from 'src/types/LevelConfig'
+
+import { USERDATA_ARROW, USERDATA_PILLAR, USERDATA_WALL } from '../userDataName'
 
 export const level1: ILevelConfig = {
   id: 1,

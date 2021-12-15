@@ -1,6 +1,8 @@
+import { ILevelConfig } from 'src/types/LevelConfig'
+
 import { USERDATA_ARROW, USERDATA_PILLAR, USERDATA_WALL } from '../userDataName'
 
-export const level2 = {
+export const level2: ILevelConfig = {
   id: 2,
   img: '/img/lvl2.png',
   car: {
