@@ -12,6 +12,16 @@ import create from 'zustand'
 const [useStore]: any = create((set: any, get: any) => ({
   objects: [
     {
+      id: 'car',
+      objectType: 'car',
+      position: [2, 0.6, 2],
+    },
+    {
+      id: 'arrow',
+      objectType: 'arrow',
+      position: [4, 0, 4],
+    },
+    {
       id: '1',
       objectType: 'box',
       position: [0, 0.5, 0],

@@ -1,1 +1,1 @@
-export type TObjectTypes = 'box' | 'cylinder' | 'arrow'
+export type TObjectTypes = 'box' | 'cylinder' | 'car' | 'arrow'

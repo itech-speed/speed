@@ -36,6 +36,8 @@ const GameMenu = ({ className, editInfo }: IProps) => {
             E - Rotate objects
             <br />R - Scale objects
             <br />
+            Delete - remove selected object
+            <br />
             CAMERA:
             <br />
             Rotate camera - hold LCM

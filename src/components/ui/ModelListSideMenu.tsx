@@ -20,36 +20,34 @@ const ModelListSideMenu = ({ className = '', onAddObject }: IProps) => {
 
   return (
     <div className={className}>
-      <div className="relative overflow-x-hidden overflow-y-auto w-80 h-screen">
-        <div
-          className={`${
-            isSideMenu ? 'right-0' : '-right-full'
-          } ${className} absolute top-0 z-50 transition bg-black bg-opacity-70 w-full h-full`}
-        >
-          <div className="text-white px-2 py-1">
-            <H6 className="mb-4">Primitives:</H6>
-            <div className="flex space-x-4">
-              <MenuItem
-                src={BoxImg}
-                onClick={() =>
-                  onAddObject({
-                    id: Date.now(),
-                    objectType: 'box',
-                    position: [0, 0.5, 0],
-                  })
-                }
-              />
-              <MenuItem
-                src={CylinderImg}
-                onClick={() =>
-                  onAddObject({
-                    id: Date.now(),
-                    objectType: 'cylinder',
-                    position: [0, 0.5, 0],
-                  })
-                }
-              />
-            </div>
+      <div
+        className={`bg-black bg-opacity-70 overflow-x-hidden overflow-y-auto transition-all h-screen ${
+          isSideMenu ? 'w-80' : 'w-0'
+        }`}
+      >
+        <div className="text-white px-2 py-1">
+          <H6 className="mb-4">Primitives:</H6>
+          <div className="flex space-x-4">
+            <MenuItem
+              src={BoxImg}
+              onClick={() =>
+                onAddObject({
+                  id: Date.now(),
+                  objectType: 'box',
+                  position: [0, 0.5, 0],
+                })
+              }
+            />
+            <MenuItem
+              src={CylinderImg}
+              onClick={() =>
+                onAddObject({
+                  id: Date.now(),
+                  objectType: 'cylinder',
+                  position: [0, 0.5, 0],
+                })
+              }
+            />
           </div>
         </div>
       </div>
