@@ -11,7 +11,7 @@ interface ILink extends IBaseProps {
 }
 
 interface IButton extends IBaseProps {
-  link: never
+  link?: never
   onClick: () => void
 }
 

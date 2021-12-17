@@ -1,6 +1,6 @@
-import React, { LazyExoticComponent, Suspense } from 'react'
+import React, { Suspense } from 'react'
 
-export const withSuspence = (LazyComponent: LazyExoticComponent<any>) => {
+export const withSuspence = (LazyComponent: any) => {
   return (props: any) => {
     return (
       <Suspense fallback={<div>Загрузка...</div>}>

@@ -10,6 +10,7 @@ import GameMenu from 'src/components/ui/GameMenu'
 import { AppDispatch, RootState } from 'src/reducers'
 import { setEndGameState } from 'src/reducers/GameReducer'
 import { levelsConfigList } from 'src/res/LevelsConfig'
+import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
 import { PATH_LEVEL } from 'src/res/routes'
 import { TEndGameState } from 'src/types/EndGameState'
 
@@ -20,7 +21,14 @@ const ParkinkGamePage = () => {
   const findedLevel = levelsConfigList.find(
     (i) => i.id.toString() === levelSlug.toString(),
   )
-  const curLevelConfig = findedLevel || levelsConfigList[0]
+
+  const isCustomLevels = localStorage.getItem(CUSTOM_LEVELS)
+  const customLevels = isCustomLevels ? JSON.parse(isCustomLevels) : null
+  const findedCustomLevel =
+    customLevels &&
+    customLevels.find((i: any) => i.id.toString() === levelSlug.toString())
+
+  const curLevelConfig = findedLevel || findedCustomLevel || levelsConfigList[0]
 
   const dispatch = useDispatch<AppDispatch>()
   const endGameState = useSelector(

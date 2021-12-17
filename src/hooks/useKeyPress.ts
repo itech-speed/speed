@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 export const useKeyPress = (
   target: string[],
   event: (cur: boolean, key: string) => void,
+  dependency: any[] = [],
 ) => {
   useEffect(() => {
     const downHandler = ({ key }: any) =>
@@ -15,5 +16,5 @@ export const useKeyPress = (
       window.removeEventListener('keydown', downHandler)
       window.removeEventListener('keyup', upHandler)
     }
-  }, [])
+  }, dependency)
 }

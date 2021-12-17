@@ -1,6 +1,6 @@
 import { BoxProps, useBox } from '@react-three/cannon'
 
-const Box = ({ args = [40, 4, 2], type = 'Static', ...props }: BoxProps) => {
+const Box = ({ args = [1, 1, 1], type = 'Static', ...props }: BoxProps) => {
   const [ref] = useBox(() => ({ type, args, ...props }))
   return (
     <mesh ref={ref} castShadow>
