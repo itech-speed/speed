@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ObjectWithTransformControl from 'src/components/levels/ObjectWithTransformControl'
 import PlaneFiber from 'src/components/levels/PlaneFiber'
@@ -13,25 +13,29 @@ import { EditMode } from 'src/types/EditMode'
 import transformEditObjToPlay from 'src/utils/transformEditObjToPlay'
 import create from 'zustand'
 
+const defaultObjs = [
+  {
+    id: 'car',
+    objectType: 'car',
+    position: [2, 0.6, 2],
+  },
+  {
+    id: 'arrow',
+    objectType: 'arrow',
+    position: [6, 0, 5],
+  },
+  {
+    id: '1',
+    objectType: 'box',
+    position: [0, 0.5, 0],
+  },
+]
 const [useStore]: any = create((set: any, get: any) => ({
-  objects: [
-    {
-      id: 'car',
-      objectType: 'car',
-      position: [2, 0.6, 2],
-    },
-    {
-      id: 'arrow',
-      objectType: 'arrow',
-      position: [6, 0, 5],
-    },
-    {
-      id: '1',
-      objectType: 'box',
-      position: [0, 0.5, 0],
-    },
-  ],
+  objects: defaultObjs,
   api: {
+    setObjects(objects: any) {
+      set((state: any) => ({ ...state, objects }))
+    },
     addObject(object: any) {
       set((state: any) => ({ ...state, objects: [...state.objects, object] }))
     },
@@ -72,7 +76,7 @@ const EditLevelPage = () => {
   const [selectedObjId, setSelectedObjId] = useState<string | null>(null)
 
   const objects = useStore((state: any) => state.objects)
-  const { addObject, deleteObject, editObject } = useStore(
+  const { setObjects, addObject, deleteObject, editObject } = useStore(
     (state: any) => state.api,
   )
 
@@ -118,6 +122,12 @@ const EditLevelPage = () => {
     localStorage.setItem(CUSTOM_LEVELS, JSON.stringify([newObject, ...levels]))
     navigate(`/${HREF_MENU}`, { replace: true })
   }
+
+  useEffect(() => {
+    return () => {
+      setObjects(defaultObjs)
+    }
+  }, [])
 
   return (
     <main className="h-screen relative">
