@@ -6,9 +6,10 @@ import H6 from '../typo/H6'
 
 interface IProps {
   className?: string
+  onAddObject: (obj: any) => void
 }
 
-const ModelListSideMenu = ({ className = '' }: IProps) => {
+const ModelListSideMenu = ({ className = '', onAddObject }: IProps) => {
   const [isSideMenu, setSideMenu] = useState(true)
 
   useKeyPress(['q', 'Q'], (pressed: boolean) => {
@@ -28,8 +29,26 @@ const ModelListSideMenu = ({ className = '' }: IProps) => {
           <div className="text-white px-2 py-1">
             <H6 className="mb-4">Primitives:</H6>
             <div className="flex space-x-4">
-              <MenuItem src={BoxImg} onClick={() => console.log('asd')} />
-              <MenuItem src={CylinderImg} onClick={() => console.log('asd')} />
+              <MenuItem
+                src={BoxImg}
+                onClick={() =>
+                  onAddObject({
+                    id: Date.now(),
+                    objectType: 'box',
+                    position: [0, 0.5, 0],
+                  })
+                }
+              />
+              <MenuItem
+                src={CylinderImg}
+                onClick={() =>
+                  onAddObject({
+                    id: Date.now(),
+                    objectType: 'cylinder',
+                    position: [0, 0.5, 0],
+                  })
+                }
+              />
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { useKeyPress } from 'src/hooks/useKeyPress'
 import { EditMode } from 'src/types/EditMode'
 import create from 'zustand'
 
-const [useStore]: any = create((set: any) => ({
+const [useStore]: any = create((set: any, get: any) => ({
   objects: [
     {
       id: '1',
@@ -31,13 +31,30 @@ const [useStore]: any = create((set: any) => ({
     addObject(object: any) {
       set((state: any) => ({ ...state, objects: [...state.objects, object] }))
     },
+    deleteObject(id: string) {
+      const objects = get().objects
+      const index = objects.findIndex((obj: any) => obj.id === id)
+      if (index >= 0) {
+        console.log(objects.slice(index))
+
+        const updatedList = [
+          ...objects.slice(0, index),
+          ...objects.slice(index + 1),
+        ]
+        console.log(updatedList)
+
+        set((state: any) => ({ ...state, objects: updatedList }))
+      }
+    },
   },
 }))
 
 const EditLevelPage = () => {
-  // const objectCounter = useRef(0)
   const [editMode, setEditMode] = useState(EditMode.Translate)
   const [selectedObjId, setSelectedObjId] = useState<string | null>(null)
+
+  const objects = useStore((state: any) => state.objects)
+  const { addObject, deleteObject } = useStore((state: any) => state.api)
 
   useKeyPress(['w', 'e', 'r'], (pressed: boolean, key: string) => {
     if (pressed) {
@@ -50,16 +67,23 @@ const EditLevelPage = () => {
       setEditMode(mode)
     }
   })
-
-  const objects = useStore((state: any) => state.objects)
-  console.log(objects)
-
-  // const { pong } = useStore((state) => state.api)
+  useKeyPress(
+    ['Delete'],
+    (pressed: boolean) => {
+      if (pressed) {
+        deleteObject(selectedObjId)
+      }
+    },
+    [selectedObjId],
+  )
 
   return (
     <main className="h-screen relative">
       <GameMenu className="absolute z-50" />
-      <ModelListSideMenu className="absolute right-0 top-0 z-50" />
+      <ModelListSideMenu
+        className="absolute right-0 top-0 z-50"
+        onAddObject={addObject}
+      />
 
       <Canvas dpr={[1, 1.5]} shadows camera={{ position: [0, 5, 15], fov: 50 }}>
         <color attach="background" args={['#e8fffe']} />
@@ -75,32 +99,18 @@ const EditLevelPage = () => {
 
         <PlaneFiber rotation={[-Math.PI / 2, 0, 0]} receiveShadow />
 
-        <ObjectWithTransformControl
-          editMode={editMode}
-          id="1"
-          selectedObjId={selectedObjId}
-          onClick={setSelectedObjId}
-          position={[0, 0.5, 0]}
-          objectType="box"
-        />
-
-        <ObjectWithTransformControl
-          editMode={editMode}
-          id="2"
-          selectedObjId={selectedObjId}
-          onClick={setSelectedObjId}
-          position={[10, 0.5, 0]}
-          objectType="box"
-        />
-
-        <ObjectWithTransformControl
-          editMode={editMode}
-          id="3"
-          selectedObjId={selectedObjId}
-          onClick={setSelectedObjId}
-          position={[20, 0.5, 0]}
-          objectType="box"
-        />
+        {objects &&
+          objects.map((obj: any) => (
+            <ObjectWithTransformControl
+              key={obj.id}
+              editMode={editMode}
+              id={obj.id}
+              selectedObjId={selectedObjId}
+              onClick={setSelectedObjId}
+              position={obj.position}
+              objectType={obj.objectType}
+            />
+          ))}
 
         <OrbitControls makeDefault />
       </Canvas>

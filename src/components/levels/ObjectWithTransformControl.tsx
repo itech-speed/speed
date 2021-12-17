@@ -1,8 +1,8 @@
 import { TransformControls } from '@react-three/drei'
 import { Vector3 } from '@react-three/fiber'
-import BoxFiber from 'src/components/levels/BoxFiber'
 import { EditMode } from 'src/types/EditMode'
 import { TObjectTypes } from 'src/types/ObjectTypes'
+import { getObjectComponent } from 'src/utils/getObjectComponent'
 
 interface IProps {
   editMode: EditMode
@@ -21,7 +21,7 @@ const ObjectWithTransformControl = ({
   position,
   objectType,
 }: IProps) => {
-  console.log(objectType)
+  const Component = getObjectComponent(objectType, true)
 
   return (
     <TransformControls
@@ -38,7 +38,7 @@ const ObjectWithTransformControl = ({
       space="local"
       size={0.7}
     >
-      <BoxFiber castShadow />
+      <Component castShadow />
     </TransformControls>
   )
 }
