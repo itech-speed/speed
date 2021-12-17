@@ -1,12 +1,13 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 
-const BoxFiber = (props: JSX.IntrinsicElements['mesh']) => {
-  const cube = useRef()
-  return (
-    <mesh ref={cube} {...props}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={'gray'} />
-    </mesh>
-  )
-}
+const BoxFiber = forwardRef(
+  (props: JSX.IntrinsicElements['mesh'], ref: any) => {
+    return (
+      <mesh ref={ref} {...props}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={'gray'} />
+      </mesh>
+    )
+  },
+)
 export default BoxFiber

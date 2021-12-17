@@ -2,14 +2,16 @@ import { useState } from 'react'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import { BoxImg, CylinderImg } from 'src/res/images'
 
+import Button from '../buttons/Button'
 import H6 from '../typo/H6'
 
 interface IProps {
   className?: string
   onAddObject: (obj: any) => void
+  onSave: () => void
 }
 
-const ModelListSideMenu = ({ className = '', onAddObject }: IProps) => {
+const ModelListSideMenu = ({ className = '', onAddObject, onSave }: IProps) => {
   const [isSideMenu, setSideMenu] = useState(true)
 
   useKeyPress(['q', 'Q'], (pressed: boolean) => {
@@ -49,6 +51,10 @@ const ModelListSideMenu = ({ className = '', onAddObject }: IProps) => {
               }
             />
           </div>
+
+          <Button className="mt-20" onClick={onSave}>
+            Save
+          </Button>
         </div>
       </div>
     </div>

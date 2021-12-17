@@ -1,13 +1,14 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 
-const CylinderFiber = (props: JSX.IntrinsicElements['mesh']) => {
-  const cylinder = useRef()
-  return (
-    <mesh ref={cylinder} {...props}>
-      <cylinderGeometry args={[1, 1, 1, 16]} />
-      <meshStandardMaterial color="gray" />
-    </mesh>
-  )
-}
+const CylinderFiber = forwardRef(
+  (props: JSX.IntrinsicElements['mesh'], ref: any) => {
+    return (
+      <mesh ref={ref} {...props}>
+        <cylinderGeometry args={[1, 1, 1, 16]} />
+        <meshStandardMaterial color="gray" />
+      </mesh>
+    )
+  },
+)
 
 export default CylinderFiber
