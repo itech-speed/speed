@@ -121,8 +121,6 @@ const EditLevelPage = () => {
       ? levelsWithoutEditable
       : localStorageLevels
 
-    console.log(levels)
-
     const index = objects.findIndex((obj: any) => obj.id === 'car')
     const objectListWithoutCar = [
       ...objects.slice(0, index),
