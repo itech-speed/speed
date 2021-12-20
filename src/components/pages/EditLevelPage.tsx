@@ -113,13 +113,15 @@ const EditLevelPage = () => {
     if (editableLevel.current) {
       levelsWithoutEditable = localStorageLevels.filter(
         // @ts-ignore
-        (i: any) => i.id.toString() === editableLevel.current.id,
+        (i: any) => i.id.toString() !== editableLevel.current.id.toString(),
       )
     }
 
     const levels = editableLevel.current
       ? levelsWithoutEditable
       : localStorageLevels
+
+    console.log(levels)
 
     const index = objects.findIndex((obj: any) => obj.id === 'car')
     const objectListWithoutCar = [
