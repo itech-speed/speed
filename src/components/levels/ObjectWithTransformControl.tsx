@@ -1,5 +1,5 @@
 import { TransformControls } from '@react-three/drei'
-import { Vector3 } from '@react-three/fiber'
+import { Euler, Vector3 } from '@react-three/fiber'
 import { useRef } from 'react'
 import { EditMode } from 'src/types/EditMode'
 import { TObjectTypes } from 'src/types/ObjectTypes'
@@ -12,6 +12,8 @@ interface IProps {
   onClick: (id: string) => void
   onEdit: (object: any) => void
   position?: Vector3
+  rotation?: Euler
+  scale?: Vector3
   objectType: TObjectTypes
 }
 
@@ -22,6 +24,8 @@ const ObjectWithTransformControl = ({
   onClick,
   onEdit,
   position,
+  rotation,
+  scale,
   objectType,
 }: IProps) => {
   const Component = getObjectComponent(objectType, true)
@@ -50,6 +54,8 @@ const ObjectWithTransformControl = ({
       }}
       mode={editMode}
       position={position}
+      rotation={rotation}
+      scale={scale}
       scaleSnap={0.5}
       translationSnap={0.5}
       rotationSnap={0.261799}
