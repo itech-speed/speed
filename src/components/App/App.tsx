@@ -8,6 +8,7 @@ import {
   HREF_MENU,
   PATH_LEVEL,
   PATH_LEVEL_CREATE,
+  PATH_LEVEL_EDIT,
 } from 'src/res/routes'
 
 const EditLevelPage = withSuspence(
@@ -25,6 +26,10 @@ const App = () => {
           <Route path={`:${PATH_LEVEL}`} element={<ParkinkGamePage />} />
 
           <Route path={PATH_LEVEL_CREATE} element={<EditLevelPage />} />
+          <Route
+            path={`${PATH_LEVEL_EDIT}/:${PATH_LEVEL}`}
+            element={<EditLevelPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,15 +1,16 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import ObjectWithTransformControl from 'src/components/levels/ObjectWithTransformControl'
 import PlaneFiber from 'src/components/levels/PlaneFiber'
 import GameMenu from 'src/components/ui/GameMenu'
 import ModelListSideMenu from 'src/components/ui/ModelListSideMenu'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
-import { HREF_MENU } from 'src/res/routes'
+import { HREF_MENU, PATH_LEVEL } from 'src/res/routes'
 import { EditMode } from 'src/types/EditMode'
+import transformEditObjToEdit from 'src/utils/transformEditObjToEdit'
 import transformEditObjToPlay from 'src/utils/transformEditObjToPlay'
 import create from 'zustand'
 
@@ -72,6 +73,9 @@ const [useStore]: any = create((set: any, get: any) => ({
 
 const EditLevelPage = () => {
   const navigate = useNavigate()
+  const params = useParams()
+  const editableLevel = useRef(null)
+
   const [editMode, setEditMode] = useState(EditMode.Translate)
   const [selectedObjId, setSelectedObjId] = useState<string | null>(null)
 
@@ -103,7 +107,19 @@ const EditLevelPage = () => {
 
   const save = () => {
     const existedLevels = localStorage.getItem(CUSTOM_LEVELS)
-    const levels = existedLevels ? JSON.parse(existedLevels) : []
+    const localStorageLevels = existedLevels ? JSON.parse(existedLevels) : []
+    let levelsWithoutEditable
+
+    if (editableLevel.current) {
+      levelsWithoutEditable = localStorageLevels.filter(
+        // @ts-ignore
+        (i: any) => i.id.toString() === editableLevel.current.id,
+      )
+    }
+
+    const levels = editableLevel.current
+      ? levelsWithoutEditable
+      : localStorageLevels
 
     const index = objects.findIndex((obj: any) => obj.id === 'car')
     const objectListWithoutCar = [
@@ -113,7 +129,10 @@ const EditLevelPage = () => {
     const carObject = objects[index]
 
     const newObject = {
-      id: Date.now(),
+      id: editableLevel.current
+        ? // @ts-ignore
+          editableLevel.current.id
+        : Date.now().toString(),
       img: '/img/no-image.png',
       car: carObject,
       objects: objectListWithoutCar.map((obj) => transformEditObjToPlay(obj)),
@@ -124,8 +143,27 @@ const EditLevelPage = () => {
   }
 
   useEffect(() => {
+    let levelObjects = defaultObjs
+    const editableLevelId = params[PATH_LEVEL]
+    if (editableLevelId) {
+      const existedLevels = localStorage.getItem(CUSTOM_LEVELS)
+      const levels = existedLevels ? JSON.parse(existedLevels) : []
+      const curLevel = levels.find(
+        (i: any) => i.id.toString() === editableLevelId,
+      )
+      if (curLevel) {
+        editableLevel.current = curLevel
+        const objects = curLevel.objects.map((i: any) =>
+          transformEditObjToEdit(i),
+        )
+
+        levelObjects = [curLevel.car, ...objects]
+      }
+    }
+
+    setObjects(levelObjects)
     return () => {
-      setObjects(defaultObjs)
+      editableLevel.current = null
     }
   }, [])
 
@@ -162,6 +200,8 @@ const EditLevelPage = () => {
               onClick={setSelectedObjId}
               onEdit={editObject}
               position={obj.position}
+              rotation={obj.rotation}
+              scale={obj.scale}
               objectType={obj.objectType}
             />
           ))}

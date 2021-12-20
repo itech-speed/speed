@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import H6 from 'src/components/typo/H6'
 import { AddImg, DeleteImg, EditImg, LogoImg } from 'src/res/images'
 import { levelsConfigList } from 'src/res/LevelsConfig'
 import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
-import { HREF_LEVEL, PATH_LEVEL_CREATE } from 'src/res/routes'
+import { HREF_LEVEL, PATH_LEVEL_CREATE, PATH_LEVEL_EDIT } from 'src/res/routes'
 
 const MenuPage = () => {
+  const navigate = useNavigate()
+
   const isCustomLevels = localStorage.getItem(CUSTOM_LEVELS)
   const [customLevels, setCustomLevels] = useState(
     isCustomLevels ? JSON.parse(isCustomLevels) : null,
@@ -27,7 +30,7 @@ const MenuPage = () => {
   }
 
   const onEdit = (id: string) => {
-    //
+    navigate(`/${HREF_LEVEL}/${PATH_LEVEL_EDIT}/${id}`, { replace: true })
   }
 
   return (
