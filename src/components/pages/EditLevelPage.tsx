@@ -7,53 +7,48 @@ import PlaneFiber from 'src/components/levels/PlaneFiber'
 import GameMenu from 'src/components/ui/GameMenu'
 import ModelListSideMenu from 'src/components/ui/ModelListSideMenu'
 import { useKeyPress } from 'src/hooks/useKeyPress'
+import defaultObjs from 'src/res/defaultEditObj.json'
 import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
 import { HREF_MENU, PATH_LEVEL } from 'src/res/routes'
+import { IEditableObject } from 'src/types/EditableObject'
 import { EditMode } from 'src/types/EditMode'
 import transformEditObjToEdit from 'src/utils/transformEditObjToEdit'
 import transformEditObjToPlay from 'src/utils/transformEditObjToPlay'
 import create from 'zustand'
 
-const defaultObjs = [
-  {
-    id: 'car',
-    objectType: 'car',
-    position: [2, 0.6, 2],
-  },
-  {
-    id: 'arrow',
-    objectType: 'arrow',
-    position: [6, 0, 5],
-  },
-  {
-    id: '1',
-    objectType: 'box',
-    position: [0, 0.5, 0],
-  },
-]
-const [useStore]: any = create((set: any, get: any) => ({
-  objects: defaultObjs,
+interface IStore {
+  objects: IEditableObject[]
   api: {
-    setObjects(objects: any) {
-      set((state: any) => ({ ...state, objects }))
+    setObjects: (objects: IEditableObject[]) => void
+    addObject: (object: IEditableObject) => void
+    deleteObject: (id: string) => void
+    editObject: (object: IEditableObject) => void
+  }
+}
+
+const useStore = create<IStore>((set, get) => ({
+  objects: defaultObjs as IEditableObject[],
+  api: {
+    setObjects(objects) {
+      set((state) => ({ ...state, objects }))
     },
-    addObject(object: any) {
-      set((state: any) => ({ ...state, objects: [...state.objects, object] }))
+    addObject(object) {
+      set((state) => ({ ...state, objects: [...state.objects, object] }))
     },
-    deleteObject(id: string) {
+    deleteObject(id) {
       const objects = get().objects
-      const index = objects.findIndex((obj: any) => obj.id === id)
+      const index = objects.findIndex((obj) => obj.id === id)
       if (index >= 0) {
         const updatedList = [
           ...objects.slice(0, index),
           ...objects.slice(index + 1),
         ]
-        set((state: any) => ({ ...state, objects: updatedList }))
+        set((state) => ({ ...state, objects: updatedList }))
       }
     },
-    editObject(object: any) {
+    editObject(object) {
       const objects = get().objects
-      const index = objects.findIndex((obj: any) => obj.id === object.id)
+      const index = objects.findIndex((obj) => obj.id === object.id)
       const updatedObject = {
         ...objects[index],
         ...object,
@@ -65,7 +60,7 @@ const [useStore]: any = create((set: any, get: any) => ({
           ...objects.slice(index + 1),
         ]
 
-        set((state: any) => ({ ...state, objects: updatedList }))
+        set((state) => ({ ...state, objects: updatedList }))
       }
     },
   },
@@ -79,9 +74,9 @@ const EditLevelPage = () => {
   const [editMode, setEditMode] = useState(EditMode.Translate)
   const [selectedObjId, setSelectedObjId] = useState<string | null>(null)
 
-  const objects = useStore((state: any) => state.objects)
+  const objects = useStore((state) => state.objects)
   const { setObjects, addObject, deleteObject, editObject } = useStore(
-    (state: any) => state.api,
+    (state) => state.api,
   )
 
   useKeyPress(['w', 'e', 'r'], (pressed: boolean, key: string) => {
@@ -98,7 +93,7 @@ const EditLevelPage = () => {
   useKeyPress(
     ['Delete'],
     (pressed: boolean) => {
-      if (pressed) {
+      if (pressed && selectedObjId) {
         deleteObject(selectedObjId)
       }
     },
@@ -121,7 +116,7 @@ const EditLevelPage = () => {
       ? levelsWithoutEditable
       : localStorageLevels
 
-    const index = objects.findIndex((obj: any) => obj.id === 'car')
+    const index = objects.findIndex((obj) => obj.id === 'car')
     const objectListWithoutCar = [
       ...objects.slice(0, index),
       ...objects.slice(index + 1),
@@ -143,11 +138,12 @@ const EditLevelPage = () => {
   }
 
   useEffect(() => {
-    let levelObjects = defaultObjs
+    let levelObjects = defaultObjs as IEditableObject[]
     const editableLevelId = params[PATH_LEVEL]
     if (editableLevelId) {
       const existedLevels = localStorage.getItem(CUSTOM_LEVELS)
       const levels = existedLevels ? JSON.parse(existedLevels) : []
+
       const curLevel = levels.find(
         (i: any) => i.id.toString() === editableLevelId,
       )
@@ -191,7 +187,7 @@ const EditLevelPage = () => {
         <PlaneFiber rotation={[-Math.PI / 2, 0, 0]} receiveShadow />
 
         {objects &&
-          objects.map((obj: any) => (
+          objects.map((obj) => (
             <ObjectWithTransformControl
               key={obj.id}
               editMode={editMode}
