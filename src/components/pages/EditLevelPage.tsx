@@ -12,8 +12,8 @@ import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
 import { HREF_MENU, PATH_LEVEL } from 'src/res/routes'
 import { IEditableObject } from 'src/types/EditableObject'
 import { EditMode } from 'src/types/EditMode'
-import transformEditObjToEdit from 'src/utils/transformEditObjToEdit'
 import transformEditObjToPlay from 'src/utils/transformEditObjToPlay'
+import transformPlayObjToEdit from 'src/utils/transformPlayObjToEdit'
 import create from 'zustand'
 
 interface IStore {
@@ -72,7 +72,7 @@ const EditLevelPage = () => {
   const editableLevel = useRef(null)
 
   const [editMode, setEditMode] = useState(EditMode.Translate)
-  const [selectedObjId, setSelectedObjId] = useState<string | null>(null)
+  const [selectedObj, setSelectedObj] = useState<IEditableObject | null>(null)
 
   const objects = useStore((state) => state.objects)
   const { setObjects, addObject, deleteObject, editObject } = useStore(
@@ -93,11 +93,11 @@ const EditLevelPage = () => {
   useKeyPress(
     ['Delete'],
     (pressed: boolean) => {
-      if (pressed && selectedObjId) {
-        deleteObject(selectedObjId)
+      if (pressed && selectedObj) {
+        deleteObject(selectedObj.id)
       }
     },
-    [selectedObjId],
+    [selectedObj],
   )
 
   const save = () => {
@@ -137,6 +137,11 @@ const EditLevelPage = () => {
     navigate(`/${HREF_MENU}`, { replace: true })
   }
 
+  const onEditObject = (obj: IEditableObject) => {
+    editObject(obj)
+    setSelectedObj(obj)
+  }
+
   useEffect(() => {
     let levelObjects = defaultObjs as IEditableObject[]
     const editableLevelId = params[PATH_LEVEL]
@@ -150,7 +155,7 @@ const EditLevelPage = () => {
       if (curLevel) {
         editableLevel.current = curLevel
         const objects = curLevel.objects.map((i: any) =>
-          transformEditObjToEdit(i),
+          transformPlayObjToEdit(i),
         )
 
         levelObjects = [curLevel.car, ...objects]
@@ -170,6 +175,8 @@ const EditLevelPage = () => {
         className="absolute right-0 top-0 z-50"
         onAddObject={addObject}
         onSave={save}
+        selectedObj={selectedObj}
+        onEditObject={onEditObject}
       />
 
       <Canvas dpr={[1, 1.5]} shadows camera={{ position: [0, 5, 15], fov: 50 }}>
@@ -190,15 +197,11 @@ const EditLevelPage = () => {
           objects.map((obj) => (
             <ObjectWithTransformControl
               key={obj.id}
+              obj={obj}
               editMode={editMode}
-              id={obj.id}
-              selectedObjId={selectedObjId}
-              onClick={setSelectedObjId}
-              onEdit={editObject}
-              position={obj.position}
-              rotation={obj.rotation}
-              scale={obj.scale}
-              objectType={obj.objectType}
+              selectedObj={selectedObj}
+              onClick={setSelectedObj}
+              onEdit={onEditObject}
             />
           ))}
 

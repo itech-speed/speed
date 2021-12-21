@@ -1,17 +1,38 @@
 import { useState } from 'react'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import { BoxImg, CylinderImg } from 'src/res/images'
+import { USERDATA_PILLAR, USERDATA_WALL } from 'src/res/userDataName'
+import { IEditableObject } from 'src/types/EditableObject'
+import { TPhysicType } from 'src/types/PhysicType'
 
 import Button from '../buttons/Button'
+import Select from '../inputs/Select'
 import H6 from '../typo/H6'
+
+const optionsCollide = [
+  { label: 'Do not touch', value: USERDATA_WALL },
+  { label: 'Touchable', value: USERDATA_PILLAR },
+]
+const optionsPhysic = [
+  { label: 'Static', value: 'Static' },
+  { label: 'Dynamic', value: 'Dynamic' },
+]
 
 interface IProps {
   className?: string
   onAddObject: (obj: any) => void
   onSave: () => void
+  selectedObj: IEditableObject | null
+  onEditObject: (obj: IEditableObject) => void
 }
 
-const ModelListSideMenu = ({ className = '', onAddObject, onSave }: IProps) => {
+const ModelListSideMenu = ({
+  className = '',
+  onAddObject,
+  onSave,
+  selectedObj,
+  onEditObject,
+}: IProps) => {
   const [isSideMenu, setSideMenu] = useState(true)
 
   useKeyPress(['q', 'Q'], (pressed: boolean) => {
@@ -19,6 +40,17 @@ const ModelListSideMenu = ({ className = '', onAddObject, onSave }: IProps) => {
       setSideMenu((prev) => !prev)
     }
   })
+  const changeObjProp = (
+    value: TPhysicType,
+    propName: keyof Pick<IEditableObject, 'collideType' | 'physicType'>,
+  ) => {
+    if (selectedObj) {
+      onEditObject({
+        ...selectedObj,
+        [propName]: value,
+      })
+    }
+  }
 
   return (
     <div className={className}>
@@ -56,6 +88,29 @@ const ModelListSideMenu = ({ className = '', onAddObject, onSave }: IProps) => {
             Save
           </Button>
         </div>
+
+        {selectedObj && (
+          <div className="text-white ml-2 mt-5">
+            <H6 weight="black">Editable object config</H6>
+            <div className="mt-4">
+              <p>Physic type:</p>
+              <Select
+                value={selectedObj.physicType}
+                options={optionsPhysic}
+                onChange={(v) => changeObjProp(v, 'physicType')}
+              />
+            </div>
+
+            <div className="mt-4">
+              <p>Collision type:</p>
+              <Select
+                value={selectedObj.collideType}
+                options={optionsCollide}
+                onChange={(v) => changeObjProp(v, 'collideType')}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
