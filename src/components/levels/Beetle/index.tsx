@@ -78,7 +78,8 @@ function Beetle({
     if (defaultCamera instanceof PerspectiveCamera) {
       // @ts-ignore
       defaultCamera.zoom = 3
-      defaultCamera.position.set(0, 30, -30)
+      // defaultCamera.position.set(16, 30, -30)
+      defaultCamera.position.set(-1, 30, -30)
       // @ts-ignore
       defaultCamera.lookAt(chassis.current.position)
     }

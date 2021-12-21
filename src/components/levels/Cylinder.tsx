@@ -1,8 +1,14 @@
 import { CylinderProps, useCylinder } from '@react-three/cannon'
 
-const Cylinder = ({ args = [0.7, 0.7, 5, 16], ...props }: CylinderProps) => {
+const Cylinder = ({
+  mass = 10,
+  type = 'Static',
+  args = [0.7, 0.7, 5, 16],
+  ...props
+}: CylinderProps) => {
   const [ref] = useCylinder(() => ({
-    mass: 10,
+    mass,
+    type,
     args,
     ...props,
   }))

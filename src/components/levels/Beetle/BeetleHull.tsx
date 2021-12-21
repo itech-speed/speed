@@ -30,6 +30,14 @@ const BeetleHull = forwardRef<any>(
       }),
       ref,
     )
+    // const cameraPos = new Vector3(-15, 1, -10)
+    // useFrame(() => {
+    //   api.position.subscribe((v) => {
+    //     // cameraPos = [v[0] - 10, 4, v[2]]
+    //     cameraPos.set(v[0], v[1], v[2])
+    //     console.log(v)
+    //   })
+    // })
 
     return (
       // @ts-ignore
@@ -40,6 +48,8 @@ const BeetleHull = forwardRef<any>(
           rotation={[0, Math.PI, 0]}
           position={[0, 10, -20]}
         />
+        {/*<OrbitControls screenSpacePanning={false} position={[10, 10, -20]} />*/}
+        {/*<OrbitControls screenSpacePanning={false} position={[-15, 1, -10]} />*/}
         <group position={[0, -0.6, 0]}>
           <mesh
             castShadow

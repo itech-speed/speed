@@ -1,39 +1,35 @@
 import { TransformControls } from '@react-three/drei'
-import { Vector3 } from '@react-three/fiber'
 import { useRef } from 'react'
+import { IEditableObject } from 'src/types/EditableObject'
 import { EditMode } from 'src/types/EditMode'
-import { TObjectTypes } from 'src/types/ObjectTypes'
 import { getObjectComponent } from 'src/utils/getObjectComponent'
 
 interface IProps {
+  obj: IEditableObject
   editMode: EditMode
-  selectedObjId: string | null
-  id: string
-  onClick: (id: string) => void
-  onEdit: (object: any) => void
-  position?: Vector3
-  objectType: TObjectTypes
+  selectedObj: IEditableObject | null
+  onClick: (obj: IEditableObject) => void
+  onEdit: (obj: IEditableObject) => void
 }
 
 const ObjectWithTransformControl = ({
   editMode,
-  selectedObjId,
-  id,
+  obj,
+  selectedObj,
   onClick,
   onEdit,
-  position,
-  objectType,
 }: IProps) => {
+  const { id, position, rotation, scale, objectType } = obj
   const Component = getObjectComponent(objectType, true)
   const ref = useRef()
 
   return (
     <TransformControls
-      showZ={selectedObjId === id}
-      showY={selectedObjId === id}
-      showX={selectedObjId === id}
-      enabled={selectedObjId === id}
-      onClick={() => onClick(id)}
+      showZ={selectedObj?.id === id}
+      showY={selectedObj?.id === id}
+      showX={selectedObj?.id === id}
+      enabled={selectedObj?.id === id}
+      onClick={() => onClick(obj)}
       onMouseUp={() => {
         // @ts-ignore
         const pos = ref.current.parent.position
@@ -42,7 +38,7 @@ const ObjectWithTransformControl = ({
         // @ts-ignore
         const scale = ref.current.parent.scale
         onEdit({
-          id,
+          ...obj,
           position: [pos.x, pos.y, pos.z],
           rotation: [rot.x, rot.y, rot.z],
           scale: [scale.x, scale.y, scale.z],
@@ -50,6 +46,8 @@ const ObjectWithTransformControl = ({
       }}
       mode={editMode}
       position={position}
+      rotation={rotation}
+      scale={scale}
       scaleSnap={0.5}
       translationSnap={0.5}
       rotationSnap={0.261799}
