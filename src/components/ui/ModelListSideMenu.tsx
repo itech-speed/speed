@@ -69,6 +69,8 @@ const ModelListSideMenu = ({
                   id: Date.now(),
                   objectType: 'box',
                   position: [0, 0.5, 0],
+                  physicType: 'Static',
+                  collideType: USERDATA_WALL,
                 })
               }
             />
@@ -79,6 +81,8 @@ const ModelListSideMenu = ({
                   id: Date.now(),
                   objectType: 'cylinder',
                   position: [0, 0.5, 0],
+                  physicType: 'Static',
+                  collideType: USERDATA_WALL,
                 })
               }
             />
