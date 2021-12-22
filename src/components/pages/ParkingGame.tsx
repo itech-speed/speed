@@ -1,5 +1,6 @@
 import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Beetle from 'src/components/levels/Beetle'
@@ -10,25 +11,16 @@ import GameMenu from 'src/components/ui/GameMenu'
 import { AppDispatch, RootState } from 'src/reducers'
 import { setEndGameState } from 'src/reducers/GameReducer'
 import { levelsConfigList } from 'src/res/LevelsConfig'
-import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
 import { PATH_LEVEL } from 'src/res/routes'
 import { TEndGameState } from 'src/types/EndGameState'
 
+import { getLevels } from '../../api/get'
+import transformCarFromServer from '../../utils/transformCarFromServer'
+import transformServerObjectToPlay from '../../utils/transformServerObjectToPlay'
+
 const ParkinkGamePage = () => {
   const params = useParams()
-
-  const levelSlug = params[PATH_LEVEL] || 1
-  const findedLevel = levelsConfigList.find(
-    (i) => i.id.toString() === levelSlug.toString(),
-  )
-
-  const isCustomLevels = localStorage.getItem(CUSTOM_LEVELS)
-  const customLevels = isCustomLevels ? JSON.parse(isCustomLevels) : null
-  const findedCustomLevel =
-    customLevels &&
-    customLevels.find((i: any) => i.id.toString() === levelSlug.toString())
-
-  const curLevelConfig = findedLevel || findedCustomLevel || levelsConfigList[0]
+  const [currentLevel, setCurrentLevel] = useState<any>(null)
 
   const dispatch = useDispatch<AppDispatch>()
   const endGameState = useSelector(
@@ -38,6 +30,38 @@ const ParkinkGamePage = () => {
   const onGameEnded = (endState: TEndGameState) => {
     dispatch(setEndGameState(endState))
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const levelSlug = params[PATH_LEVEL] || 1
+      const findedLevel = levelsConfigList.find(
+        (i) => i.id.toString() === levelSlug.toString(),
+      )
+
+      if (findedLevel) setCurrentLevel(findedLevel)
+      else {
+        const customLevels = await getLevels()
+        const findedCustomLevel =
+          customLevels &&
+          customLevels.find(
+            (i: any) => i.id.toString() === levelSlug.toString(),
+          )
+
+        if (findedCustomLevel) {
+          // @ts-ignore
+          findedCustomLevel.objects = findedCustomLevel.objects.map(
+            (obj: any) => transformServerObjectToPlay(obj),
+          )
+
+          // @ts-ignore
+          findedCustomLevel.car = transformCarFromServer(findedCustomLevel.car)
+          setCurrentLevel(findedCustomLevel)
+        } else setCurrentLevel(levelsConfigList[0])
+      }
+    })()
+  }, [])
+
+  if (!currentLevel) return <div>Loading</div>
 
   return (
     <main className="h-screen relative">
@@ -70,9 +94,9 @@ const ParkinkGamePage = () => {
             userData={{ id: 'floor' }}
           />
 
-          <Beetle {...curLevelConfig.car} onGameEnded={onGameEnded} />
+          <Beetle {...currentLevel.car} onGameEnded={onGameEnded} />
 
-          <LevelBuilder levelData={curLevelConfig} />
+          <LevelBuilder levelData={currentLevel} />
         </Physics>
       </Canvas>
 

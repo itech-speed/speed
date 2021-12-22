@@ -8,13 +8,17 @@ import GameMenu from 'src/components/ui/GameMenu'
 import ModelListSideMenu from 'src/components/ui/ModelListSideMenu'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import defaultObjs from 'src/res/defaultEditObj.json'
-import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
 import { HREF_MENU, PATH_LEVEL } from 'src/res/routes'
 import { IEditableObject } from 'src/types/EditableObject'
 import { EditMode } from 'src/types/EditMode'
-import transformEditObjToPlay from 'src/utils/transformEditObjToPlay'
-import transformPlayObjToEdit from 'src/utils/transformPlayObjToEdit'
 import create from 'zustand'
+
+import { getLevels } from '../../api/get'
+import { createLevel } from '../../api/post'
+import { updateLevel } from '../../api/update'
+import transformCarFromServer from '../../utils/transformCarFromServer'
+import transformEditObjectFromServer from '../../utils/transformEditObjectFromServer'
+import transformLevelObjToServer from '../../utils/transformLevelObjToServer'
 
 interface IStore {
   objects: IEditableObject[]
@@ -73,6 +77,7 @@ const EditLevelPage = () => {
 
   const [editMode, setEditMode] = useState(EditMode.Translate)
   const [selectedObj, setSelectedObj] = useState<IEditableObject | null>(null)
+  const [customLevels, setCustomLevels] = useState<any>(null)
 
   const objects = useStore((state) => state.objects)
   const { setObjects, addObject, deleteObject, editObject } = useStore(
@@ -100,22 +105,7 @@ const EditLevelPage = () => {
     [selectedObj],
   )
 
-  const save = () => {
-    const existedLevels = localStorage.getItem(CUSTOM_LEVELS)
-    const localStorageLevels = existedLevels ? JSON.parse(existedLevels) : []
-    let levelsWithoutEditable
-
-    if (editableLevel.current) {
-      levelsWithoutEditable = localStorageLevels.filter(
-        // @ts-ignore
-        (i: any) => i.id.toString() !== editableLevel.current.id.toString(),
-      )
-    }
-
-    const levels = editableLevel.current
-      ? levelsWithoutEditable
-      : localStorageLevels
-
+  const save = async () => {
     const index = objects.findIndex((obj) => obj.id === 'car')
     const objectListWithoutCar = [
       ...objects.slice(0, index),
@@ -129,11 +119,17 @@ const EditLevelPage = () => {
           editableLevel.current.id
         : Date.now().toString(),
       img: '/img/no-image.png',
-      car: carObject,
-      objects: objectListWithoutCar.map((obj) => transformEditObjToPlay(obj)),
+      car: transformLevelObjToServer(carObject),
+      objects: objectListWithoutCar.map((obj) =>
+        transformLevelObjToServer(obj),
+      ),
     }
 
-    localStorage.setItem(CUSTOM_LEVELS, JSON.stringify([newObject, ...levels]))
+    if (editableLevel.current) {
+      // @ts-ignore
+      await updateLevel(newObject, editableLevel.current.uid)
+    } else await createLevel(newObject)
+
     navigate(`/${HREF_MENU}`, { replace: true })
   }
 
@@ -143,22 +139,28 @@ const EditLevelPage = () => {
   }
 
   useEffect(() => {
+    ;(async () => {
+      // @ts-ignore
+      setCustomLevels(await getLevels())
+    })()
+  }, [])
+
+  useEffect(() => {
+    if (!customLevels) return
+
     let levelObjects = defaultObjs as IEditableObject[]
     const editableLevelId = params[PATH_LEVEL]
     if (editableLevelId) {
-      const existedLevels = localStorage.getItem(CUSTOM_LEVELS)
-      const levels = existedLevels ? JSON.parse(existedLevels) : []
-
-      const curLevel = levels.find(
+      const curLevel = customLevels.find(
         (i: any) => i.id.toString() === editableLevelId,
       )
       if (curLevel) {
         editableLevel.current = curLevel
         const objects = curLevel.objects.map((i: any) =>
-          transformPlayObjToEdit(i),
+          transformEditObjectFromServer(i),
         )
 
-        levelObjects = [curLevel.car, ...objects]
+        levelObjects = [transformCarFromServer(curLevel.car), ...objects]
       }
     }
 
@@ -166,7 +168,7 @@ const EditLevelPage = () => {
     return () => {
       editableLevel.current = null
     }
-  }, [])
+  }, [customLevels])
 
   return (
     <main className="h-screen relative">
