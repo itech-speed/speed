@@ -16,6 +16,8 @@ import transformEditObjToPlay from 'src/utils/transformEditObjToPlay'
 import transformPlayObjToEdit from 'src/utils/transformPlayObjToEdit'
 import create from 'zustand'
 
+import transformLevelObjToServer from '../../utils/transformLevelObjToServer'
+
 interface IStore {
   objects: IEditableObject[]
   api: {
@@ -132,6 +134,12 @@ const EditLevelPage = () => {
       car: carObject,
       objects: objectListWithoutCar.map((obj) => transformEditObjToPlay(obj)),
     }
+
+    const newTransformed = objectListWithoutCar.map((obj) =>
+      transformLevelObjToServer(obj),
+    )
+
+    console.log({ newObject, objectListWithoutCar, newTransformed })
 
     localStorage.setItem(CUSTOM_LEVELS, JSON.stringify([newObject, ...levels]))
     navigate(`/${HREF_MENU}`, { replace: true })
