@@ -1,37 +1,33 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import H6 from 'src/components/typo/H6'
 import { AddImg, DeleteImg, EditImg, LogoImg } from 'src/res/images'
 import { levelsConfigList } from 'src/res/LevelsConfig'
-import { CUSTOM_LEVELS } from 'src/res/localStorageNames'
 import { HREF_LEVEL, PATH_LEVEL_CREATE, PATH_LEVEL_EDIT } from 'src/res/routes'
+
+import { deleteLevel } from '../../api/delete'
+import { getLevels } from '../../api/get'
 
 const MenuPage = () => {
   const navigate = useNavigate()
+  const [customLevels, setCustomLevels] = useState<any>([])
+  const onDelete = async (id: string) => {
+    const deletedLevel = customLevels.find((level: any) => level.id == id)
 
-  const isCustomLevels = localStorage.getItem(CUSTOM_LEVELS)
-  const [customLevels, setCustomLevels] = useState(
-    isCustomLevels ? JSON.parse(isCustomLevels) : null,
-  )
-
-  const onDelete = (id: string) => {
-    const isLevels = localStorage.getItem(CUSTOM_LEVELS)
-    const levels = isLevels ? JSON.parse(isLevels) : null
-    const index = levels.findIndex((obj: any) => obj.id === id)
-    if (index >= 0) {
-      const updatedList = [
-        ...levels.slice(0, index),
-        ...levels.slice(index + 1),
-      ]
-      setCustomLevels(updatedList)
-      localStorage.setItem(CUSTOM_LEVELS, JSON.stringify(updatedList))
-    }
+    await deleteLevel(deletedLevel?.uid)
+    setCustomLevels(await getLevels())
   }
 
   const onEdit = (id: string) => {
     navigate(`/${HREF_LEVEL}/${PATH_LEVEL_EDIT}/${id}`, { replace: true })
   }
+
+  useEffect(() => {
+    ;(async () => {
+      // @ts-ignore
+      setCustomLevels(await getLevels())
+    })()
+  }, [])
 
   return (
     <>
