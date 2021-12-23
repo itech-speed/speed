@@ -2,11 +2,11 @@ import { forwardRef } from 'react'
 import { IObjectProps } from 'src/types/ObjectProps'
 
 const BoxFiber = forwardRef(
-  ({ meshProps, materialProps }: IObjectProps, ref: any) => {
+  ({ material, ...props }: IObjectProps, ref: any) => {
     return (
-      <mesh ref={ref} {...meshProps} castShadow>
+      <mesh ref={ref} {...props} castShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial {...materialProps} />
+        <meshStandardMaterial {...material} />
       </mesh>
     )
   },
