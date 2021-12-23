@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import GameContext from 'src/components/contexts/GameContext'
+import GameContext from 'src/components/Context_Game'
 
 interface IProps {
   className: string

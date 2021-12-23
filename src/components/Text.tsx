@@ -7,8 +7,8 @@ interface IProps {
   weight?: IWeight
 }
 
-const H6 = ({ className = '', weight = 'regural', children }: IProps) => {
+const Text = ({ className = '', weight = 'regural', children }: IProps) => {
   return <h6 className={`${className} font-${weight} text-xl`}>{children}</h6>
 }
 
-export default H6
+export default Text

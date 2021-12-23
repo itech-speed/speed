@@ -1,7 +1,6 @@
+import Button from 'src/components/Button'
+import Text from 'src/components/Text'
 import { HREF_MENU } from 'src/res/routes'
-
-import Button from '../buttons/Button'
-import H6 from '../typo/H6'
 
 interface IProps {
   className?: string
@@ -13,7 +12,7 @@ const GameMenu = ({ className, editInfo }: IProps) => {
     <div className={className}>
       <div className="p-2 bg-black bg-opacity-60 text-white">
         <Button className="mb-3" link={`/${HREF_MENU}`}>
-          <H6>Menu</H6>
+          <Text>Menu</Text>
         </Button>
 
         {editInfo ? (

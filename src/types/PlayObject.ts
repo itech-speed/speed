@@ -3,12 +3,14 @@ import { TObjectTypes } from './ObjectTypes'
 import { TPhysicType } from './PhysicType'
 import { TTriplet } from './Triplet'
 
-export interface IEditableObject {
+export interface IPlayObject {
   id: string
+  objectType: TObjectTypes
   position?: TTriplet
   rotation?: TTriplet
-  scale?: TTriplet
-  physicType?: TPhysicType
-  collideType?: TCollideType
-  objectType: TObjectTypes
+  args?: TTriplet
+  type?: TPhysicType
+  userData?: {
+    id: TCollideType
+  }
 }
