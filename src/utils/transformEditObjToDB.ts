@@ -1,4 +1,6 @@
-const transformLevelObjToServer = (obj: any) => {
+import { IEditableObject } from 'src/types/EditableObject'
+
+const transformEditObjToDB = (obj: IEditableObject): any => {
   const newObj = {
     ...obj,
     position: obj.position && {
@@ -36,4 +38,4 @@ const transformLevelObjToServer = (obj: any) => {
   return newObj
 }
 
-export default transformLevelObjToServer
+export default transformEditObjToDB

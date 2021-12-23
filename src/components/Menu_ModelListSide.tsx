@@ -1,13 +1,12 @@
 import { useState } from 'react'
+import Button from 'src/components/Button'
+import Select from 'src/components/Input_Select'
+import Text from 'src/components/Text'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import { BoxImg, CylinderImg } from 'src/res/images'
 import { USERDATA_PILLAR, USERDATA_WALL } from 'src/res/userDataName'
 import { IEditableObject } from 'src/types/EditableObject'
 import { TPhysicType } from 'src/types/PhysicType'
-
-import Button from '../buttons/Button'
-import Select from '../inputs/Select'
-import H6 from '../typo/H6'
 
 const optionsCollide = [
   { label: 'Do not touch', value: USERDATA_WALL },
@@ -60,7 +59,7 @@ const ModelListSideMenu = ({
         }`}
       >
         <div className="text-white px-2 py-1">
-          <H6 className="mb-4">Primitives:</H6>
+          <Text className="mb-4">Primitives:</Text>
           <div className="flex space-x-4">
             <MenuItem
               src={BoxImg}
@@ -95,7 +94,7 @@ const ModelListSideMenu = ({
 
         {selectedObj && (
           <div className="text-white ml-2 mt-5">
-            <H6 weight="black">Editable object config</H6>
+            <Text weight="black">Editable object config</Text>
             <div className="mt-4">
               <p>Physic type:</p>
               <Select

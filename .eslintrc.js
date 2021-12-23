@@ -36,7 +36,7 @@ module.exports = {
     'linebreak-style': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'prettier/prettier': [
-      'error',
+      'warn',
       {
         endOfLine: 'auto',
       },

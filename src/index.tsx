@@ -2,8 +2,8 @@ import 'src/styles/global.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from 'src/components/App/App'
-import { GameContextProvider } from 'src/components/contexts/GameContext'
+import App from 'src/components/App'
+import { GameContextProvider } from 'src/components/Context_Game'
 
 ReactDOM.render(
   <React.StrictMode>

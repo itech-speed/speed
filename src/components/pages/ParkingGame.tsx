@@ -2,19 +2,19 @@ import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
 import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import getLevels from 'src/api/requests/getLevels'
 import Beetle from 'src/components/levels/Beetle'
 import LevelBuilder from 'src/components/levels/LevelBuilder'
 import Plane from 'src/components/levels/Plane'
-import EndGameModal from 'src/components/modals/EndGameModal'
-import GameMenu from 'src/components/ui/GameMenu'
+import GameMenu from 'src/components/Menu_Game'
+import EndGameModal from 'src/components/Modal_EndGame'
 import { levelsConfigList } from 'src/res/LevelsConfig'
 import { PATH_LEVEL } from 'src/res/routes'
 import { TEndGameState } from 'src/types/EndGameState'
+import transformBDCarToPlay from 'src/utils/transformBDCarToPlay'
+import transformDBObjectToPlay from 'src/utils/transformDBObjectToPlay'
 
-import { getLevels } from '../../api/get'
-import transformCarFromServer from '../../utils/transformCarFromServer'
-import transformServerObjectToPlay from '../../utils/transformServerObjectToPlay'
-import GameContext from '../contexts/GameContext'
+import GameContext from '../Context_Game'
 
 const ParkinkGamePage = () => {
   const params = useParams()
@@ -27,7 +27,7 @@ const ParkinkGamePage = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
+    const setStartSetup = async () => {
       const levelSlug = params[PATH_LEVEL] || 1
       const findedLevel = levelsConfigList.find(
         (i) => i.id.toString() === levelSlug.toString(),
@@ -38,22 +38,23 @@ const ParkinkGamePage = () => {
         const customLevels = await getLevels()
         const findedCustomLevel =
           customLevels &&
-          customLevels.find(
-            (i: any) => i.id.toString() === levelSlug.toString(),
-          )
+          customLevels.find((i) => i.id.toString() === levelSlug.toString())
 
         if (findedCustomLevel) {
-          // @ts-ignore
-          findedCustomLevel.objects = findedCustomLevel.objects.map(
-            (obj: any) => transformServerObjectToPlay(obj),
-          )
+          const newLevel = {
+            ...findedCustomLevel,
+            car: transformBDCarToPlay(findedCustomLevel.car),
+            objects: findedCustomLevel.objects.map((obj) =>
+              transformDBObjectToPlay(obj),
+            ),
+          }
 
-          // @ts-ignore
-          findedCustomLevel.car = transformCarFromServer(findedCustomLevel.car)
-          setCurrentLevel(findedCustomLevel)
+          setCurrentLevel(newLevel)
         } else setCurrentLevel(levelsConfigList[0])
       }
-    })()
+    }
+
+    setStartSetup()
   }, [])
 
   if (!currentLevel) return <div>Loading</div>

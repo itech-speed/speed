@@ -2,82 +2,31 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import getLevels from 'src/api/requests/getLevels'
+import postLevel from 'src/api/requests/postLevel'
+import updateLevel from 'src/api/requests/updateLevel'
 import ObjectWithTransformControl from 'src/components/levels/ObjectWithTransformControl'
 import PlaneFiber from 'src/components/levels/PlaneFiber'
-import GameMenu from 'src/components/ui/GameMenu'
-import ModelListSideMenu from 'src/components/ui/ModelListSideMenu'
+import GameMenu from 'src/components/Menu_Game'
+import ModelListSideMenu from 'src/components/Menu_ModelListSide'
+import { useStore } from 'src/components/Zustand_EditLevelPage'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import defaultObjs from 'src/res/defaultEditObj.json'
 import { HREF_MENU, PATH_LEVEL } from 'src/res/routes'
+import { IDatabaseLevel } from 'src/types/DatabaseObject'
 import { IEditableObject } from 'src/types/EditableObject'
 import { EditMode } from 'src/types/EditMode'
-import create from 'zustand'
-
-import { getLevels } from '../../api/get'
-import { createLevel } from '../../api/post'
-import { updateLevel } from '../../api/update'
-import transformCarFromServer from '../../utils/transformCarFromServer'
-import transformEditObjectFromServer from '../../utils/transformEditObjectFromServer'
-import transformLevelObjToServer from '../../utils/transformLevelObjToServer'
-
-interface IStore {
-  objects: IEditableObject[]
-  api: {
-    setObjects: (objects: IEditableObject[]) => void
-    addObject: (object: IEditableObject) => void
-    deleteObject: (id: string) => void
-    editObject: (object: IEditableObject) => void
-  }
-}
-
-const useStore = create<IStore>((set, get) => ({
-  objects: defaultObjs as IEditableObject[],
-  api: {
-    setObjects(objects) {
-      set((state) => ({ ...state, objects }))
-    },
-    addObject(object) {
-      set((state) => ({ ...state, objects: [...state.objects, object] }))
-    },
-    deleteObject(id) {
-      const objects = get().objects
-      const index = objects.findIndex((obj) => obj.id === id)
-      if (index >= 0) {
-        const updatedList = [
-          ...objects.slice(0, index),
-          ...objects.slice(index + 1),
-        ]
-        set((state) => ({ ...state, objects: updatedList }))
-      }
-    },
-    editObject(object) {
-      const objects = get().objects
-      const index = objects.findIndex((obj) => obj.id === object.id)
-      const updatedObject = {
-        ...objects[index],
-        ...object,
-      }
-      if (index >= 0) {
-        const updatedList = [
-          ...objects.slice(0, index),
-          updatedObject,
-          ...objects.slice(index + 1),
-        ]
-
-        set((state) => ({ ...state, objects: updatedList }))
-      }
-    },
-  },
-}))
+import transformBDCarToPlay from 'src/utils/transformBDCarToPlay'
+import transformDBObjectToEdit from 'src/utils/transformDBObjectToEdit'
+import transformEditObjToDB from 'src/utils/transformEditObjToDB'
 
 const EditLevelPage = () => {
   const navigate = useNavigate()
   const params = useParams()
-  const editableLevel = useRef(null)
+  const editableLevel = useRef<IDatabaseLevel | null>(null)
 
   const [editMode, setEditMode] = useState(EditMode.Translate)
   const [selectedObj, setSelectedObj] = useState<IEditableObject | null>(null)
-  const [customLevels, setCustomLevels] = useState<any>(null)
 
   const objects = useStore((state) => state.objects)
   const { setObjects, addObject, deleteObject, editObject } = useStore(
@@ -115,20 +64,16 @@ const EditLevelPage = () => {
 
     const newObject = {
       id: editableLevel.current
-        ? // @ts-ignore
-          editableLevel.current.id
+        ? editableLevel.current.id
         : Date.now().toString(),
       img: '/img/no-image.png',
-      car: transformLevelObjToServer(carObject),
-      objects: objectListWithoutCar.map((obj) =>
-        transformLevelObjToServer(obj),
-      ),
+      car: transformEditObjToDB(carObject),
+      objects: objectListWithoutCar.map((obj) => transformEditObjToDB(obj)),
     }
 
-    if (editableLevel.current) {
-      // @ts-ignore
+    if (editableLevel.current && editableLevel.current.uid) {
       await updateLevel(newObject, editableLevel.current.uid)
-    } else await createLevel(newObject)
+    } else await postLevel(newObject)
 
     navigate(`/${HREF_MENU}`, { replace: true })
   }
@@ -139,36 +84,33 @@ const EditLevelPage = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
-      // @ts-ignore
-      setCustomLevels(await getLevels())
-    })()
-  }, [])
-
-  useEffect(() => {
-    if (!customLevels) return
-
-    let levelObjects = defaultObjs as IEditableObject[]
-    const editableLevelId = params[PATH_LEVEL]
-    if (editableLevelId) {
-      const curLevel = customLevels.find(
-        (i: any) => i.id.toString() === editableLevelId,
-      )
-      if (curLevel) {
-        editableLevel.current = curLevel
-        const objects = curLevel.objects.map((i: any) =>
-          transformEditObjectFromServer(i),
+    const setStartSetup = async () => {
+      let levelObjects = defaultObjs as IEditableObject[]
+      const editableLevelId = params[PATH_LEVEL]
+      if (editableLevelId) {
+        const customLevels = await getLevels()
+        const customLevel = customLevels.find(
+          (i) => i.id.toString() === editableLevelId,
         )
+        if (customLevel) {
+          editableLevel.current = customLevel
+          const objects = customLevel.objects.map((i) =>
+            transformDBObjectToEdit(i),
+          )
 
-        levelObjects = [transformCarFromServer(curLevel.car), ...objects]
+          levelObjects = [transformBDCarToPlay(customLevel.car), ...objects]
+        }
       }
+
+      setObjects(levelObjects)
     }
 
-    setObjects(levelObjects)
+    setStartSetup()
+
     return () => {
       editableLevel.current = null
     }
-  }, [customLevels])
+  }, [])
 
   return (
     <main className="h-screen relative">

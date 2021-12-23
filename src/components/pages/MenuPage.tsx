@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import H6 from 'src/components/typo/H6'
+import deleteLevel from 'src/api/requests/deleteLevel'
+import getLevels from 'src/api/requests/getLevels'
+import H6 from 'src/components/Text'
 import { AddImg, DeleteImg, EditImg, LogoImg } from 'src/res/images'
 import { levelsConfigList } from 'src/res/LevelsConfig'
 import { HREF_LEVEL, PATH_LEVEL_CREATE, PATH_LEVEL_EDIT } from 'src/res/routes'
 
-import { deleteLevel } from '../../api/delete'
-import { getLevels } from '../../api/get'
-
 const MenuPage = () => {
   const navigate = useNavigate()
   const [customLevels, setCustomLevels] = useState<any>([])
+
   const onDelete = async (id: string) => {
     const deletedLevel = customLevels.find((level: any) => level.id == id)
 
@@ -23,10 +23,12 @@ const MenuPage = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
-      // @ts-ignore
-      setCustomLevels(await getLevels())
-    })()
+    const setStartSetup = async () => {
+      const levels = await getLevels()
+      setCustomLevels(levels)
+    }
+
+    setStartSetup()
   }, [])
 
   return (

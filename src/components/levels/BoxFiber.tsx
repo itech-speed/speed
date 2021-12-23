@@ -1,13 +1,15 @@
 import { forwardRef } from 'react'
+import { IObjectProps } from 'src/types/ObjectProps'
 
 const BoxFiber = forwardRef(
-  (props: JSX.IntrinsicElements['mesh'], ref: any) => {
+  ({ meshProps, materialProps }: IObjectProps, ref: any) => {
     return (
-      <mesh ref={ref} {...props}>
+      <mesh ref={ref} {...meshProps} castShadow>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={'gray'} />
+        <meshStandardMaterial {...materialProps} />
       </mesh>
     )
   },
 )
+
 export default BoxFiber
