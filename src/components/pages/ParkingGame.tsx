@@ -1,15 +1,12 @@
 import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Beetle from 'src/components/levels/Beetle'
 import LevelBuilder from 'src/components/levels/LevelBuilder'
 import Plane from 'src/components/levels/Plane'
 import EndGameModal from 'src/components/modals/EndGameModal'
 import GameMenu from 'src/components/ui/GameMenu'
-import { AppDispatch, RootState } from 'src/reducers'
-import { setEndGameState } from 'src/reducers/GameReducer'
 import { levelsConfigList } from 'src/res/LevelsConfig'
 import { PATH_LEVEL } from 'src/res/routes'
 import { TEndGameState } from 'src/types/EndGameState'
@@ -17,18 +14,16 @@ import { TEndGameState } from 'src/types/EndGameState'
 import { getLevels } from '../../api/get'
 import transformCarFromServer from '../../utils/transformCarFromServer'
 import transformServerObjectToPlay from '../../utils/transformServerObjectToPlay'
+import GameContext from '../contexts/GameContext'
 
 const ParkinkGamePage = () => {
   const params = useParams()
   const [currentLevel, setCurrentLevel] = useState<any>(null)
 
-  const dispatch = useDispatch<AppDispatch>()
-  const endGameState = useSelector(
-    (state: RootState) => state.game.endGameState,
-  )
+  const { endGameState, setEndGameState } = useContext(GameContext)
 
   const onGameEnded = (endState: TEndGameState) => {
-    dispatch(setEndGameState(endState))
+    setEndGameState(endState)
   }
 
   useEffect(() => {
