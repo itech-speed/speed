@@ -2,16 +2,14 @@ import 'src/styles/global.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
 import App from 'src/components/App/App'
-
-import store from './reducers'
+import { GameContextProvider } from 'src/components/contexts/GameContext'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <GameContextProvider>
       <App />
-    </Provider>
+    </GameContextProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 )

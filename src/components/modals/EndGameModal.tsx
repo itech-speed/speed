@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { setEndGameState } from 'src/reducers/GameReducer'
+import { useContext, useEffect } from 'react'
+import GameContext from 'src/components/contexts/GameContext'
 
 interface IProps {
   className: string
@@ -8,12 +7,12 @@ interface IProps {
 }
 
 const EndGameModal = ({ className, text }: IProps) => {
-  const dispatch = useDispatch()
+  const { setEndGameState } = useContext(GameContext)
 
   useEffect(() => {
     const listenerFunc = (event: KeyboardEvent) => {
       if (event.key === 'r') {
-        dispatch(setEndGameState(null))
+        setEndGameState(null)
       }
     }
     window.addEventListener('keydown', listenerFunc)
