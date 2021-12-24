@@ -30,7 +30,10 @@ const ObjectWithTransformControl = ({
       showY={selectedObj?.id === id}
       showX={selectedObj?.id === id}
       enabled={selectedObj?.id === id}
-      onClick={() => onClick(obj)}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick(obj)
+      }}
       onMouseUp={() => {
         if (ref.current && ref.current.parent) {
           const pos = ref.current.parent.position
