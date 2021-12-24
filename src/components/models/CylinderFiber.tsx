@@ -2,7 +2,10 @@ import { forwardRef } from 'react'
 import { IObjectProps } from 'src/types/ObjectProps'
 
 const CylinderFiber = forwardRef(
-  ({ material, ...props }: IObjectProps, ref: any) => {
+  (
+    { material, ...props }: IObjectProps<JSX.IntrinsicElements['mesh']>,
+    ref: any,
+  ) => {
     return (
       <mesh ref={ref} {...props}>
         <cylinderGeometry args={[1, 1, 1, 16]} />

@@ -12,6 +12,9 @@
   {
     "id": "1",
     "objectType": "box",
-    "position": [0, 0.5, 0]
+    "position": [0, 0.5, 0],
+    "material": {
+      "color": "#777777"
+    }
   }
 ]

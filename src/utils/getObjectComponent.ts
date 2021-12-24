@@ -1,10 +1,10 @@
-import Arrow from 'src/components/levels/Arrow'
-import ArrowFiber from 'src/components/levels/ArrowFiber'
-import BeetleFiber from 'src/components/levels/Beetle/BeetleFiber'
-import Box from 'src/components/levels/Box'
-import BoxFiber from 'src/components/levels/BoxFiber'
-import Cylinder from 'src/components/levels/Cylinder'
-import CylinderFiber from 'src/components/levels/CylinderFiber'
+import Arrow from 'src/components/models/Arrow'
+import ArrowFiber from 'src/components/models/ArrowFiber'
+import BeetleFiber from 'src/components/models/Beetle/BeetleFiber'
+import Box from 'src/components/models/Box'
+import BoxFiber from 'src/components/models/BoxFiber'
+import Cylinder from 'src/components/models/Cylinder'
+import CylinderFiber from 'src/components/models/CylinderFiber'
 import { TObjectTypes } from 'src/types/ObjectTypes'
 
 export const getObjectComponent = (

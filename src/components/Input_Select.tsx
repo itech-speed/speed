@@ -1,16 +1,15 @@
-import { TPhysicType } from 'src/types/PhysicType'
-
 interface IProps {
   value?: string
   options: { label: string; value: string }[]
-  onChange: (value: TPhysicType) => void
+  onChange: (value: string) => void
 }
+
 const Select = ({ value, options, onChange }: IProps) => {
   return (
     <div className="relative inline-block w-full text-gray-700">
       <select
         className="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
-        onChange={(e) => onChange(e.target.value as TPhysicType)}
+        onChange={(e) => onChange(e.target.value)}
         value={value}
       >
         {options.map((i) => (

@@ -2,7 +2,10 @@ import { forwardRef } from 'react'
 import { IObjectProps } from 'src/types/ObjectProps'
 
 const BoxFiber = forwardRef(
-  ({ material, ...props }: IObjectProps, ref: any) => {
+  (
+    { material, ...props }: IObjectProps<JSX.IntrinsicElements['mesh']>,
+    ref: any,
+  ) => {
     return (
       <mesh ref={ref} {...props} castShadow>
         <boxGeometry args={[1, 1, 1]} />
