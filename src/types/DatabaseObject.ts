@@ -1,3 +1,5 @@
+import { MeshStandardMaterialProps } from '@react-three/fiber'
+
 import { TCollideType } from './CollideType'
 import { TObjectTypes } from './ObjectTypes'
 import { TPhysicType } from './PhysicType'
@@ -18,6 +20,7 @@ export interface IDatabaseObject {
   position?: Vector
   rotation?: Vector
   size?: Vector & { segments?: number }
+  material?: MeshStandardMaterialProps
 }
 
 interface Vector {

@@ -5,10 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import getLevels from 'src/api/requests/getLevels'
 import postLevel from 'src/api/requests/postLevel'
 import updateLevel from 'src/api/requests/updateLevel'
-import ObjectWithTransformControl from 'src/components/levels/ObjectWithTransformControl'
-import PlaneFiber from 'src/components/levels/PlaneFiber'
+import EditMenu from 'src/components/Menu_Edit'
 import GameMenu from 'src/components/Menu_Game'
-import ModelListSideMenu from 'src/components/Menu_ModelListSide'
+import ObjectWithTransformControl from 'src/components/models/ObjectWithTransformControl'
+import PlaneFiber from 'src/components/models/PlaneFiber'
 import { useStore } from 'src/components/Zustand_EditLevelPage'
 import { useKeyPress } from 'src/hooks/useKeyPress'
 import defaultObjs from 'src/res/defaultEditObj.json'
@@ -115,7 +115,7 @@ const EditLevelPage = () => {
   return (
     <main className="h-screen relative">
       <GameMenu className="absolute z-50" />
-      <ModelListSideMenu
+      <EditMenu
         className="absolute right-0 top-0 z-50"
         onAddObject={addObject}
         onSave={save}

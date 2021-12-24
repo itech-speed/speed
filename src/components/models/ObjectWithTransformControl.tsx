@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { IEditableObject } from 'src/types/EditableObject'
 import { EditMode } from 'src/types/EditMode'
 import { getObjectComponent } from 'src/utils/getObjectComponent'
+import * as THREE from 'three'
 
 interface IProps {
   obj: IEditableObject
@@ -21,7 +22,7 @@ const ObjectWithTransformControl = ({
 }: IProps) => {
   const { id, position, rotation, scale, objectType } = obj
   const Component = getObjectComponent(objectType, true)
-  const ref = useRef()
+  const ref = useRef<THREE.Mesh>()
 
   return (
     <TransformControls
@@ -31,18 +32,17 @@ const ObjectWithTransformControl = ({
       enabled={selectedObj?.id === id}
       onClick={() => onClick(obj)}
       onMouseUp={() => {
-        // @ts-ignore
-        const pos = ref.current.parent.position
-        // @ts-ignore
-        const rot = ref.current.parent.rotation
-        // @ts-ignore
-        const scale = ref.current.parent.scale
-        onEdit({
-          ...obj,
-          position: [pos.x, pos.y, pos.z],
-          rotation: [rot.x, rot.y, rot.z],
-          scale: [scale.x, scale.y, scale.z],
-        })
+        if (ref.current && ref.current.parent) {
+          const pos = ref.current.parent.position
+          const rot = ref.current.parent.rotation
+          const scale = ref.current.parent.scale
+          onEdit({
+            ...obj,
+            position: [pos.x, pos.y, pos.z],
+            rotation: [rot.x, rot.y, rot.z],
+            scale: [scale.x, scale.y, scale.z],
+          })
+        }
       }}
       mode={editMode}
       position={position}
@@ -54,7 +54,7 @@ const ObjectWithTransformControl = ({
       space="local"
       size={0.7}
     >
-      <Component ref={ref} castShadow />
+      <Component ref={ref} castShadow material={obj.material} />
     </TransformControls>
   )
 }

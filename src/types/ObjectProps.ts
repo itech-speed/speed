@@ -1,5 +1,5 @@
-import { MeshProps, MeshStandardMaterialProps } from '@react-three/fiber'
+import { MeshStandardMaterialProps } from '@react-three/fiber'
 
-export type IObjectProps = MeshProps & {
+export type IObjectProps<T> = T & {
   material: MeshStandardMaterialProps
 }

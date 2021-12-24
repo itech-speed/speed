@@ -6,8 +6,7 @@ import { USERDATA_WALL } from '../res/userDataName'
 
 const transformDBObjectToPlay = (obj: IDatabaseObject): IPlayObject => {
   const newObj = {
-    id: obj.id,
-    objectType: obj.objectType,
+    ...obj,
     position:
       obj.position &&
       ([obj.position.x, obj.position.y, obj.position.z] as TTriplet),
@@ -17,7 +16,7 @@ const transformDBObjectToPlay = (obj: IDatabaseObject): IPlayObject => {
     args:
       obj.size &&
       (obj.objectType === 'cylinder'
-        ? ([obj.size.x, obj.size.z, obj.size.y] as TTriplet)
+        ? ([obj.size.x, obj.size.z, obj.size.y, 16] as any)
         : ([obj.size.x, obj.size.y, obj.size.z] as TTriplet)),
     type: obj.physicType || 'Static',
     userData: {

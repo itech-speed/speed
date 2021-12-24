@@ -1,3 +1,5 @@
+import { MeshStandardMaterialProps } from '@react-three/fiber'
+
 import { TCollideType } from './CollideType'
 import { TObjectTypes } from './ObjectTypes'
 import { TPhysicType } from './PhysicType'
@@ -13,4 +15,5 @@ export interface IPlayObject {
   userData?: {
     id: TCollideType
   }
+  material?: MeshStandardMaterialProps
 }
