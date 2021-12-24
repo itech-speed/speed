@@ -16,9 +16,9 @@ interface IProps {
 
 const AddModelMenu = ({ onAddObject }: IProps) => {
   return (
-    <div className="text-white">
+    <div className="text-white bg-gray-800 p-2 rounded">
       <Text weight="black">Primitives:</Text>
-      <div className="flex space-x-4 mt-3">
+      <div className="flex space-x-4 mt-3 bg-gray-600 p-1 rounded">
         <MenuItem
           src={BoxImg}
           onClick={() =>

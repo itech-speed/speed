@@ -8,8 +8,8 @@ const CylinderFiber = forwardRef(
   ) => {
     return (
       <mesh ref={ref} {...props}>
-        <cylinderGeometry args={[1, 1, 1, 16]} />
-        <meshStandardMaterial {...material} />
+        <cylinderGeometry attach="geometry" args={[1, 1, 1, 16]} />
+        <meshStandardMaterial attach="material" {...material} />
       </mesh>
     )
   },

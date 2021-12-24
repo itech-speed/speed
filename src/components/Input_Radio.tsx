@@ -9,10 +9,11 @@ const Radio = ({ value, options, onChange }: IProps) => {
     <div className="flex space-x-1">
       {options.map((i) => (
         <button
+          key={i.value}
           className={`py-1 px-2 rounded ${
             value === i.value
               ? 'bg-gray-300 text-black'
-              : 'bg-gray-600 texh-white'
+              : 'bg-gray-700 texh-white'
           }`}
           onClick={() => onChange(i.value)}
         >

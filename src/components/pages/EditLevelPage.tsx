@@ -135,6 +135,7 @@ const EditLevelPage = () => {
           penumbra={1}
         />
 
+        <gridHelper args={[60, 60, `white`, `gray`]} />
         <PlaneFiber rotation={[-Math.PI / 2, 0, 0]} receiveShadow />
 
         {objects &&

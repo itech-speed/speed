@@ -8,8 +8,8 @@ const BoxFiber = forwardRef(
   ) => {
     return (
       <mesh ref={ref} {...props} castShadow>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial {...material} />
+        <boxGeometry attach="geometry" args={[1, 1, 1]} />
+        <meshStandardMaterial attach="material" {...material} />
       </mesh>
     )
   },

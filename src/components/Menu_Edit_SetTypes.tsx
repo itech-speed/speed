@@ -34,9 +34,9 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
   return (
     <>
       {selectedObj && (
-        <div className="text-white mt-5">
+        <div className="text-white mt-5 bg-gray-800 p-2 rounded">
           <Text weight="black">Editable object config</Text>
-          <div className="mt-1">
+          <div className="mt-1 bg-gray-600 p-1 rounded">
             <p className="mb-2">Physic type:</p>
             <Radio
               value={selectedObj.physicType}
@@ -45,7 +45,7 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
             />
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 bg-gray-600 p-1 rounded">
             <p className="mb-2">Collision type:</p>
             <Radio
               value={selectedObj.collideType}

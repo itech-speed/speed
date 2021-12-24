@@ -12,6 +12,8 @@
   {
     "id": "1",
     "objectType": "box",
+    "physicType": "Static",
+    "collideType": "touchable",
     "position": [0, 0.5, 0],
     "material": {
       "color": "#777777"
