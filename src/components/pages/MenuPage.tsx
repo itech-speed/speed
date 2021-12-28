@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import deleteLevel from 'src/api/requests/deleteLevel'
-import getLevels from 'src/api/requests/getLevels'
+import { getCompainLevels, getCustomLevels } from 'src/api/requests/getLevels'
 import H6 from 'src/components/Text'
 import { AddImg, DeleteImg, EditImg, LogoImg } from 'src/res/images'
-import { levelsConfigList } from 'src/res/LevelsConfig'
 import { HREF_LEVEL, PATH_LEVEL_CREATE, PATH_LEVEL_EDIT } from 'src/res/routes'
 
 const MenuPage = () => {
   const navigate = useNavigate()
   const [customLevels, setCustomLevels] = useState<any>([])
+  const [compainLevels, setCompainLevels] = useState<any>([])
 
   const onDelete = async (id: string) => {
     const deletedLevel = customLevels.find((level: any) => level.id == id)
 
     await deleteLevel(deletedLevel?.uid)
-    setCustomLevels(await getLevels())
+    setCustomLevels(await getCustomLevels())
   }
 
   const onEdit = (id: string) => {
@@ -24,8 +24,10 @@ const MenuPage = () => {
 
   useEffect(() => {
     const setStartSetup = async () => {
-      const levels = await getLevels()
-      setCustomLevels(levels)
+      const customLevels = await getCustomLevels()
+      const compainLevels = await getCompainLevels()
+      setCustomLevels(customLevels)
+      setCompainLevels(compainLevels)
     }
 
     setStartSetup()
@@ -45,14 +47,15 @@ const MenuPage = () => {
       <main className="container mt-5">
         <H6>Compain levels:</H6>
         <div className="mt-2 flex flex-wrap space-x-4">
-          {levelsConfigList.map((i) => (
-            <LevelCard
-              key={i.id}
-              path={`/${HREF_LEVEL}/${i.id}`}
-              imgLink={i.img}
-              title={`Level ${i.id}`}
-            />
-          ))}
+          {compainLevels &&
+            compainLevels.map((i: any) => (
+              <LevelCard
+                key={i.id}
+                path={`/${HREF_LEVEL}/${i.id}`}
+                imgLink={i.img}
+                title={`Level ${i.id}`}
+              />
+            ))}
         </div>
 
         <H6 className="mt-5">Custom levels:</H6>

@@ -2,18 +2,18 @@ import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
 import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import getLevels from 'src/api/requests/getLevels'
+import { getCompainLevels, getCustomLevels } from 'src/api/requests/getLevels'
 import GameMenu from 'src/components/Menu_Game'
 import EndGameModal from 'src/components/Modal_EndGame'
 import Beetle from 'src/components/models/Beetle'
 import LevelBuilder from 'src/components/models/LevelBuilder'
 import Plane from 'src/components/models/Plane'
-import { levelsConfigList } from 'src/res/LevelsConfig'
 import { PATH_LEVEL } from 'src/res/routes'
 import { TEndGameState } from 'src/types/EndGameState'
 import transformBDCarToPlay from 'src/utils/transformBDCarToPlay'
 import transformDBObjectToPlay from 'src/utils/transformDBObjectToPlay'
 
+import { IDatabaseLevel } from '../../types/DatabaseObject'
 import GameContext from '../Context_Game'
 
 const ParkinkGamePage = () => {
@@ -26,16 +26,23 @@ const ParkinkGamePage = () => {
     setEndGameState(endState)
   }
 
+  const transformCompainLevel = (level: IDatabaseLevel): any => ({
+    ...level,
+    car: transformBDCarToPlay(level.car),
+    objects: level.objects.map((obj) => transformDBObjectToPlay(obj)),
+  })
+
   useEffect(() => {
     const setStartSetup = async () => {
       const levelSlug = params[PATH_LEVEL] || 1
-      const findedLevel = levelsConfigList.find(
+      const compainLevels = await getCompainLevels()
+      const findedLevel = compainLevels.find(
         (i) => i.id.toString() === levelSlug.toString(),
       )
 
-      if (findedLevel) setCurrentLevel(findedLevel)
+      if (findedLevel) setCurrentLevel(transformCompainLevel(findedLevel))
       else {
-        const customLevels = await getLevels()
+        const customLevels = await getCustomLevels()
         const findedCustomLevel =
           customLevels &&
           customLevels.find((i) => i.id.toString() === levelSlug.toString())
@@ -50,7 +57,7 @@ const ParkinkGamePage = () => {
           }
 
           setCurrentLevel(newLevel)
-        } else setCurrentLevel(levelsConfigList[0])
+        } else setCurrentLevel(transformCompainLevel(compainLevels[0]))
       }
     }
 
