@@ -7,6 +7,7 @@ import { TPhysicType } from './PhysicType'
 export interface IDatabaseLevel {
   id: string
   uid?: string
+  customLevel?: boolean
   img: string
   car: IDatabaseObject
   objects: IDatabaseObject[]

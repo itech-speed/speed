@@ -2,7 +2,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import getLevels from 'src/api/requests/getLevels'
+import { getCustomLevels } from 'src/api/requests/getLevels'
 import postLevel from 'src/api/requests/postLevel'
 import updateLevel from 'src/api/requests/updateLevel'
 import EditMenu from 'src/components/Menu_Edit'
@@ -67,6 +67,7 @@ const EditLevelPage = () => {
         ? editableLevel.current.id
         : Date.now().toString(),
       img: '/img/no-image.png',
+      customLevel: true,
       car: transformEditObjToDB(carObject),
       objects: objectListWithoutCar.map((obj) => transformEditObjToDB(obj)),
     }
@@ -88,7 +89,7 @@ const EditLevelPage = () => {
       let levelObjects = defaultObjs as IEditableObject[]
       const editableLevelId = params[PATH_LEVEL]
       if (editableLevelId) {
-        const customLevels = await getLevels()
+        const customLevels = await getCustomLevels()
         const customLevel = customLevels.find(
           (i) => i.id.toString() === editableLevelId,
         )
