@@ -20,7 +20,8 @@ const transformDBObjectToPlay = (obj: IDatabaseObject): IPlayObject => {
         : ([obj.size.x, obj.size.y, obj.size.z] as TTriplet)),
     type: obj.physicType || 'Static',
     userData: {
-      id: obj.id === 'arrow' ? 'arrow' : obj.collideType || USERDATA_WALL,
+      id:
+        obj.objectType === 'arrow' ? 'arrow' : obj.collideType || USERDATA_WALL,
     },
   }
 

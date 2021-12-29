@@ -2,7 +2,7 @@ import { Physics } from '@react-three/cannon'
 import { Canvas } from '@react-three/fiber'
 import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getCompainLevels, getCustomLevels } from 'src/api/requests/getLevels'
+import { getAllLevels } from 'src/api/requests/getLevels'
 import GameMenu from 'src/components/Menu_Game'
 import EndGameModal from 'src/components/Modal_EndGame'
 import Beetle from 'src/components/models/Beetle'
@@ -26,43 +26,35 @@ const ParkinkGamePage = () => {
     setEndGameState(endState)
   }
 
-  const transformCompainLevel = (level: IDatabaseLevel): any => ({
-    ...level,
-    car: transformBDCarToPlay(level.car),
-    objects: level.objects.map((obj) => transformDBObjectToPlay(obj)),
-  })
+  const transformAndSetLevel = (level: IDatabaseLevel): any => {
+    const transformedLevel = {
+      ...level,
+      car: transformBDCarToPlay(level.car),
+      objects: level.objects.map((obj) => transformDBObjectToPlay(obj)),
+    }
+
+    setCurrentLevel(transformedLevel)
+  }
 
   useEffect(() => {
     const setStartSetup = async () => {
       const levelSlug = params[PATH_LEVEL] || 1
-      const compainLevels = await getCompainLevels()
-      const findedLevel = compainLevels.find(
+      const allLevels = await getAllLevels()
+      const findedLevel = allLevels.find(
         (i) => i.id.toString() === levelSlug.toString(),
       )
 
-      if (findedLevel) setCurrentLevel(transformCompainLevel(findedLevel))
-      else {
-        const customLevels = await getCustomLevels()
-        const findedCustomLevel =
-          customLevels &&
-          customLevels.find((i) => i.id.toString() === levelSlug.toString())
-
-        if (findedCustomLevel) {
-          const newLevel = {
-            ...findedCustomLevel,
-            car: transformBDCarToPlay(findedCustomLevel.car),
-            objects: findedCustomLevel.objects.map((obj) =>
-              transformDBObjectToPlay(obj),
-            ),
-          }
-
-          setCurrentLevel(newLevel)
-        } else setCurrentLevel(transformCompainLevel(compainLevels[0]))
-      }
+      findedLevel
+        ? transformAndSetLevel(findedLevel)
+        : transformAndSetLevel(allLevels[0])
     }
 
     setStartSetup()
-  }, [])
+
+    return () => {
+      setCurrentLevel(null)
+    }
+  }, [params])
 
   if (!currentLevel) return <div>Loading</div>
 
@@ -104,7 +96,12 @@ const ParkinkGamePage = () => {
       </Canvas>
 
       {endGameState !== null && (
-        <EndGameModal className="absolute inset-0" text={endGameState} />
+        <EndGameModal
+          className="absolute inset-0"
+          currentLevelID={currentLevel.id}
+          isCustomLevel={currentLevel.customLevel}
+          text={endGameState}
+        />
       )}
     </main>
   )
