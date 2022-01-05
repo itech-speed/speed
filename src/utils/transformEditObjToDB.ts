@@ -33,6 +33,11 @@ const transformEditObjToDB = (obj: IEditableObject): any => {
   if (!obj.rotation) delete newObj.rotation
   if (!obj.scale) delete newObj.size
 
+  if (obj.id === 'arrow') {
+    delete newObj.collideType
+    delete newObj.physicType
+  }
+
   delete newObj.scale
 
   return newObj

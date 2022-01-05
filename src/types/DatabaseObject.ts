@@ -9,7 +9,8 @@ export interface IDatabaseLevel {
   uid?: string
   customLevel?: boolean
   img: string
-  car: IDatabaseObject
+  car: IDatabaseCarObject
+  finish: IDatabaseFinishObject
   objects: IDatabaseObject[]
 }
 
@@ -21,6 +22,17 @@ export interface IDatabaseObject {
   position?: Vector
   rotation?: Vector
   size?: Vector & { segments?: number }
+  material?: MeshStandardMaterialProps
+}
+
+export interface IDatabaseCarObject {
+  position?: Vector
+  rotation?: Vector
+  material?: MeshStandardMaterialProps
+}
+
+export interface IDatabaseFinishObject {
+  position?: Vector
   material?: MeshStandardMaterialProps
 }
 

@@ -14,7 +14,9 @@ import transformBDCarToPlay from 'src/utils/transformBDCarToPlay'
 import transformDBObjectToPlay from 'src/utils/transformDBObjectToPlay'
 
 import { IDatabaseLevel } from '../../types/DatabaseObject'
+import transformFinishDBtoPlay from '../../utils/transformFinishDBtoPlay'
 import GameContext from '../Context_Game'
+import Arrow from '../models/Arrow'
 
 const ParkinkGamePage = () => {
   const params = useParams()
@@ -30,6 +32,7 @@ const ParkinkGamePage = () => {
     const transformedLevel = {
       ...level,
       car: transformBDCarToPlay(level.car),
+      finish: transformFinishDBtoPlay(level.finish),
       objects: level.objects.map((obj) => transformDBObjectToPlay(obj)),
     }
 
@@ -92,6 +95,8 @@ const ParkinkGamePage = () => {
           <Beetle {...currentLevel.car} onGameEnded={onGameEnded} />
 
           <LevelBuilder levelData={currentLevel} />
+
+          <Arrow {...currentLevel.finish} />
         </Physics>
       </Canvas>
 

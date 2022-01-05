@@ -20,6 +20,10 @@ import transformBDCarToPlay from 'src/utils/transformBDCarToPlay'
 import transformDBObjectToEdit from 'src/utils/transformDBObjectToEdit'
 import transformEditObjToDB from 'src/utils/transformEditObjToDB'
 
+import transformDBFinishObjToEdit from '../../utils/transformDBFinishObjToEdit'
+import transformEditCarToDB from '../../utils/transformEditCarToDB'
+import transformEditFinishToDB from '../../utils/transformEditFinishToDB'
+
 const EditLevelPage = () => {
   const navigate = useNavigate()
   const params = useParams()
@@ -55,12 +59,13 @@ const EditLevelPage = () => {
   )
 
   const save = async () => {
-    const index = objects.findIndex((obj) => obj.id === 'car')
-    const objectListWithoutCar = [
-      ...objects.slice(0, index),
-      ...objects.slice(index + 1),
-    ]
-    const carObject = objects[index]
+    const carIndex = objects.findIndex((obj) => obj.id === 'car')
+    const finishIndex = objects.findIndex((obj) => obj.id === 'arrow')
+    const objectListWithoutCarAndArrow = objects.filter(
+      (obj) => obj.id !== 'car' && obj.id !== 'arrow',
+    )
+    const carObject = objects[carIndex]
+    const finishObject = objects[finishIndex]
 
     const newObject = {
       id: editableLevel.current
@@ -68,8 +73,11 @@ const EditLevelPage = () => {
         : Date.now().toString(),
       img: '/img/no-image.png',
       customLevel: true,
-      car: transformEditObjToDB(carObject),
-      objects: objectListWithoutCar.map((obj) => transformEditObjToDB(obj)),
+      car: transformEditCarToDB(carObject),
+      finish: transformEditFinishToDB(finishObject),
+      objects: objectListWithoutCarAndArrow.map((obj) =>
+        transformEditObjToDB(obj),
+      ),
     }
 
     if (editableLevel.current && editableLevel.current.uid) {
@@ -99,7 +107,11 @@ const EditLevelPage = () => {
             transformDBObjectToEdit(i),
           )
 
-          levelObjects = [transformBDCarToPlay(customLevel.car), ...objects]
+          levelObjects = [
+            transformBDCarToPlay(customLevel.car),
+            transformDBFinishObjToEdit(customLevel.finish),
+            ...objects,
+          ]
         }
       }
 

@@ -1,10 +1,15 @@
-import { IDatabaseObject } from 'src/types/DatabaseObject'
+import { IDatabaseCarObject } from 'src/types/DatabaseObject'
 import { IPlayObject } from 'src/types/PlayObject'
 import { TTriplet } from 'src/types/Triplet'
 
-const transformBDCarToPlay = (obj: IDatabaseObject): IPlayObject => {
+import { TObjectTypes } from '../types/ObjectTypes'
+
+const transformBDCarToPlay = (obj: IDatabaseCarObject): IPlayObject => {
+  const carObjectType: TObjectTypes = 'car'
   const newObj = {
     ...obj,
+    id: 'car',
+    objectType: carObjectType,
     position:
       obj.position &&
       ([obj.position.x, obj.position.y, obj.position.z] as TTriplet),
@@ -16,7 +21,6 @@ const transformBDCarToPlay = (obj: IDatabaseObject): IPlayObject => {
   if (!obj.rotation) {
     delete newObj.rotation
   }
-  delete newObj.size
 
   return newObj
 }
