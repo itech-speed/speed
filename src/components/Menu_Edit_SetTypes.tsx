@@ -27,8 +27,6 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
     >,
   ) => {
     if (selectedObj) {
-      console.log(value)
-
       onEditObject({
         ...selectedObj,
         [propName]: value,
@@ -63,7 +61,7 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
             <p>Cast Shadow:</p>
             <input
               type="checkbox"
-              defaultChecked={selectedObj.castShadow}
+              checked={selectedObj.castShadow}
               onChange={(e) => changeObjProp(e.target.checked, 'castShadow')}
             />
           </div>
