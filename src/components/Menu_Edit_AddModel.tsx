@@ -7,6 +7,7 @@ const basicObjectProps = {
   position: [0, 0.5, 0],
   physicType: 'Static',
   collideType: USERDATA_WALL,
+  castShadow: true,
   material: defaultMaterial,
 }
 

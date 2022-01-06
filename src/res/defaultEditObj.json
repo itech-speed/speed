@@ -15,6 +15,7 @@
     "physicType": "Static",
     "collideType": "touchable",
     "position": [0, 0.5, 0],
+    "castShadow": true,
     "material": {
       "color": "#777777"
     }

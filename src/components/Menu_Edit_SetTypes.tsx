@@ -63,11 +63,7 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
             <p>Cast Shadow:</p>
             <input
               type="checkbox"
-              defaultChecked={
-                selectedObj.castShadow !== undefined
-                  ? selectedObj.castShadow
-                  : true
-              }
+              defaultChecked={selectedObj.castShadow}
               onChange={(e) => changeObjProp(e.target.checked, 'castShadow')}
             />
           </div>
