@@ -51,7 +51,12 @@ const EditLevelPage = () => {
   useKeyPress(
     ['Delete'],
     (pressed: boolean) => {
-      if (pressed && selectedObj) {
+      if (
+        pressed &&
+        selectedObj &&
+        selectedObj.id !== 'car' &&
+        selectedObj.id !== 'arrow'
+      ) {
         deleteObject(selectedObj.id)
       }
     },
