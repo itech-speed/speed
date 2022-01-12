@@ -6,12 +6,13 @@ const Box = ({
   mass = 10,
   args = [1, 1, 1],
   type = 'Static',
+  castShadow = true,
   material = defaulMaterial,
   ...props
 }: IObjectProps<BoxProps>) => {
   const [ref] = useBox(() => ({ mass, type, args, ...props }))
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref} castShadow={castShadow}>
       <boxGeometry args={args} />
       <meshStandardMaterial {...material} />
     </mesh>

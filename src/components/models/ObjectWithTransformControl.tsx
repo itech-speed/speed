@@ -57,7 +57,11 @@ const ObjectWithTransformControl = ({
       space="local"
       size={0.7}
     >
-      <Component ref={ref} castShadow material={obj.material} />
+      <Component
+        ref={ref}
+        castShadow={obj.castShadow}
+        material={obj.material}
+      />
     </TransformControls>
   )
 }

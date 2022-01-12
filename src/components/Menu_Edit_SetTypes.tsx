@@ -20,8 +20,11 @@ interface IProps {
 
 const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
   const changeObjProp = (
-    value: string,
-    propName: keyof Pick<IEditableObject, 'collideType' | 'physicType'>,
+    value: any,
+    propName: keyof Pick<
+      IEditableObject,
+      'collideType' | 'physicType' | 'castShadow'
+    >,
   ) => {
     if (selectedObj) {
       onEditObject({
@@ -33,7 +36,7 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
 
   return (
     <>
-      {selectedObj && (
+      {selectedObj && selectedObj.id !== 'car' && selectedObj.id !== 'arrow' && (
         <div className="text-white mt-5 bg-gray-800 p-2 rounded">
           <Text weight="black">Editable object config</Text>
           <div className="mt-1 bg-gray-600 p-1 rounded">
@@ -51,6 +54,15 @@ const SetTypesMenu = ({ selectedObj, onEditObject }: IProps) => {
               value={selectedObj.collideType}
               options={optionsCollide}
               onChange={(v) => changeObjProp(v, 'collideType')}
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <p>Cast Shadow:</p>
+            <input
+              type="checkbox"
+              checked={selectedObj.castShadow}
+              onChange={(e) => changeObjProp(e.target.checked, 'castShadow')}
             />
           </div>
         </div>

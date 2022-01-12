@@ -13,5 +13,6 @@ export interface IEditableObject {
   physicType?: TPhysicType
   collideType?: TCollideType
   objectType: TObjectTypes
+  castShadow?: boolean
   material?: MeshStandardMaterialProps
 }
