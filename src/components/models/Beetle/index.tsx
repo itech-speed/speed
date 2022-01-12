@@ -112,7 +112,7 @@ function Beetle({
       // @ts-ignore
       chassis.current.api.angularVelocity.set(0, 1, 0)
       // @ts-ignore
-      chassis.current.api.rotation.set(0, 0.13, 0)
+      chassis.current.api.rotation.set(0, -0.05, 0)
       // chassis.current.api.rotation.set(0, -Math.PI / 4, 0)
     }
   })
